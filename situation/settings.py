@@ -4,10 +4,10 @@ from __future__ import unicode_literals
 # Generate these for your app at https://dev.twitter.com/apps/new
 TWITTER = {
     'AUTH': {
-        'consumer_key': 'KEY',
-        'consumer_secret': 'SECRET',
-        'token': 'TOKEN',
-        'token_secret': 'TOKEN_SECRET',
+        'consumer_key': 'rym1JOQ7Z8s6uRLAMDBQQ',
+        'consumer_secret': 'NRtIvPoW9c5rJQAnEpJ3WIUWGZGxGZlcUP0eeCbX5s',
+        'token': '584021415-rw1qpbslAtP7gDM6M8V0FaYnozDdlnH5XQakQetZ',
+        'token_secret': '7kUDLx4VcXecqZsfVGmbTcqd7kd5fSNNyJFxvrlszGg',
     },
 }
 

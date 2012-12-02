@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-import simplejson as json
+import json
 from datetime import datetime
 
 from google.appengine.ext import db

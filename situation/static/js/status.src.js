@@ -268,7 +268,7 @@ var Status = {
         timer = setInterval(loadData, interval);
         $('.load button').click(function (e) {
             loadCalendar($('.messages ul li').length);
-        })
+        });
     }
 };
 
