@@ -48,7 +48,6 @@ def to_json(*args, **kwargs):
     indent = None if is_xhr else 2
     return json.dumps(dict(*args, **kwargs),
                       indent=indent,
-                      use_decimal=True,
                       default=default_json_serializer)
 
 
