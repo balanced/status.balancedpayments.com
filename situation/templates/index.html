@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Balanced</title>
+    <link rel="shortcut icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAB50RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNS4xqx9I6wAAAStJREFUWIXtlT1SwzAQRp+YHMAeGsrcIGlc4yukpDHODaBLF6dzB5yAkIYyOYJSu/INUtIw9g1MgZhhZJlITogbfZ12Pu2+0c+uaJqGIXU1aHUP4AGAkR4QQlDF0Rh4BWKgBl5CWWQuiRebyROQAgEggXmelAf913WdwFYVRyVYVnGUOhRPgQe1F5Vra/K2AKo4CoCpwXtvC9DhnS42k/FRgD9Un+rNk/JwFCCURc33nel6cwAweXcmY9cJzICVApHALJSFMYFJeVLuVI6f/c/A3OQV+qsUQtjW6SXbX3AxeQAP4AFa09BWH+/XGXCrlvubu8+sT55ejUgVX2rhlQ3EuRqRadq5TMuTAQLL2L8BmAaT9bA6B8AjsP61XquYs1qP8NIavA94AA/wBRJiTbdsTuB4AAAAAElFTkSuQmCC" type="image/x-icon">
+    <link href='https://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static/css/bootstrap-2.0.css">
+    <link rel="stylesheet" href="/static/css/base.css">
+</head>
+<body>
+<a href="https://www.balancedpayments.com"><img src="https://d3n06lmttbcmxe.cloudfront.net/images/status/balanced_status_logo.png" id="balanced-status-logo"></a>
+
+<div class="stc summary">
+    <h2><span class="as-of">Status as of</span> <time datetime="">--</time></h2>
+</div>
+
+<div class="services stc">
+    <ul>
+        <li class="API">
+            <svg>
+                <path d="m 120 0 L 120 295"></path>
+            </svg>
+            <h3>API</h3>
+            <div class="uptime-image UP">
+                UP
+            </div>
+        </li>
+        <li class="JS">
+            <svg>
+                <path d="m 120 0 L 120 295"></path>
+            </svg>
+            <h3>JS</h3>
+            <div class="uptime-image UP">
+                UP
+            </div>
+        </li>
+        <li class="DASH">
+            <svg>
+                <path d="m 120 0 L 120 295"></path>
+            </svg>
+            <h3>DASHBOARD</h3>
+            <div class="uptime-image UP">
+                UP
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="recent-updates stc">
+    <ul>
+        <li>
+            <h3>Recent updates</h3>
+            <a href="https://twitter.com/balancedstatus" class="tweet-up" target="_blank">@balancedstatus</a>
+        </li>
+        <li class="API">
+            <div class="issue">
+            </div>
+        </li>
+        <li class="JS">
+            <div class="issue">
+            </div>
+        </li>
+        <li class="DASH">
+            <div class="issue">
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="uptime stc">
+    <ul>
+        <li>
+            <h3>Uptime for the<br>last 30 days</h3>
+        </li>
+
+        <li class="API">
+
+            <h1>--<span>%</span></h1>
+        </li>
+        <li class="JS">
+
+            <h1>--<span>%</span></h1>
+        </li>
+        <li class="DASH">
+
+            <h1>--<span>%</span></h1>
+        </li>
+    </ul>
+</div>
+<div class="messages stc">
+    <ul>
+
+    </ul>
+    <div class="load">
+        <button>Load more</button>
+    </div>
+</div>
+<script type="text/javascript" src="/static/js/balanced.lib.min.js"></script>
+<script type="text/javascript" src="/static/js/status.min.js"></script>
+<script type="text/javascript">
+    //  kick everything off when jquery is ready
+    $(function () {
+        Balanced.init({});
+    });
+</script>
+
+</body>
+</html>

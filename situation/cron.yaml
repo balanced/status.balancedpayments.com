@@ -1,0 +1,9 @@
+cron:
+#- description: twitter update
+#  url: /twitter
+#  method: POST
+#  schedule: every 5 minutes
+#- description: uptime update
+#  url: /uptime
+#  method: POST
+#  schedule: every 5 minutes

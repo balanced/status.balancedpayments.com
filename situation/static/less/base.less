@@ -1,0 +1,377 @@
+
+@import "bootstrap-2.0/bootstrap-2.0/mixins";
+@import "bootstrap-2.0/bootstrap-2.0/variables";
+@import "variables";
+
+
+@bitter: 'Bitter', serif;
+@pageWidth: 940px;
+
+
+.roundedButton() {
+  font-weight: bold;
+  font-size: 12px;
+  border: 0;
+  border-radius: 16px;
+  background-color: #78A22F;
+  color-profile :white;
+  color: white;
+  .box-shadow(inset 0px 0px 1px 0px rgba(117, 117, 117, 0.3));
+  display: inline-block;
+  padding: 2px 15px;
+  margin: 8px;
+  text-transform: uppercase;
+  height: auto;
+  letter-spacing: 2px;
+  border: 2px solid darken(#78A22F, 5%);
+  &:hover {
+    background: #96B45B;
+    border-color: #78A22F;
+    box-shadow: none;
+  }
+}
+
+
+body {
+    background-color: black;
+    margin: 90px auto 0;
+}
+
+#balanced-status-logo {
+    display: block;
+    margin: 0 auto 50px;
+}
+
+// status container
+.stc {
+    &>* {
+        width: @pageWidth;
+        margin: 0 auto;
+    }
+}
+.uptime-image {
+    display: block;
+    text-indent: -4000px;
+    width: 156px;
+    height: 156px;
+    margin: auto;
+    position: relative;
+    &.UP {
+        background: url(/static/images/status/icon_UP.png) 0 0 no-repeat;
+    }
+    &.DOWN {
+        background: url(/static/images/status/icon_DOWN.png) 0 0 no-repeat;
+    }
+    &.ISSUE {
+        background: url(/static/images/status/icon_ISSUE.png) 0 0 no-repeat;
+    }
+}
+.summary {
+    text-align: center;
+    h2 {
+        background-color: #1a1a1a;
+        display: inline-block;
+        width: auto;
+        padding: 0 30px;
+        width: 365px;
+        border-top: 1px dotted #b3b3b3;
+        border-bottom: 1px dotted #b3b3b3;
+        margin-bottom: 60px;
+
+    }
+    .as-of {
+        display: inline-block;
+        font-size: 14px;
+        color: black;
+        text-transform: uppercase;
+        font-family: 'NimbusSanNov-Bla';
+        letter-spacing: 2px;
+        text-align: right;
+        padding-right: 20px;
+        color: #999;
+        vertical-align: middle;
+    }
+    time {
+        font-size: 13px;
+        color: white;
+        font-family: @bitter;
+        font-weight: normal;
+        vertical-align: middle;
+    }
+}
+.services {
+    ul, li {
+        padding: 0;
+        text-align: center;
+    }
+    li {
+        display: inline-block;
+        width: 240px;
+        height: 295px;
+        margin: auto;
+        position: relative;
+        h3 {
+            margin: 0 auto 35px;
+            background-color: white;
+            font-family: @bitter;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 5px;
+            width: 130px;
+            position: relative;
+        }
+
+    }
+    svg {
+        position: absolute;
+        width: 240px;
+        height: 295px;
+        left: 0;
+    }
+    path {
+        stroke: #808080;
+        fill: #808080;
+    }
+    img {
+        position: relative;
+    }
+}
+.recent-updates {
+    background-color: #e6e7e8;
+    ul, li {
+        padding: 0;
+    }
+    li {
+        padding-top: 27px;
+        padding-bottom: 30px;
+        font-size: 13px;
+        display: table-cell;
+        border-left: 2px solid #b3b3b3;
+        vertical-align: top;
+        &:first-child {
+            text-align: center;
+            width: 225px;
+            border-left: 0;
+        }
+        &.API {
+            padding-left: 25px;
+            padding-right: 25px;
+            width: 242px - 25px * 2;
+        }
+        &.JS {
+            padding-left: 25px;
+            padding-right: 25px;
+            width: 242px - 25px * 2;
+        }
+        &.DASH {
+            width: auto;
+            padding-left: 25px;
+        }
+    }
+    p, em {
+        font-family: @romanFontFamily;
+        font-size: 14px;
+        color: #666;
+    }
+    .tweet {
+        text-indent: -4000px;
+        background: url(/static/images/status/icon_twitter_sm.png) 0 0;
+        width: 15px;
+        height: 10px;
+        display: inline-block;
+        margin-left: 20px;
+    }
+    time {
+        font-family: @bitter;
+        font-size: 11px;
+        font-style: italic;
+        color: #000;
+    }
+    h3 {
+      font-size: 14px;
+      color: black;
+      text-transform: uppercase;
+      font-family: 'NimbusSanNov-Bla';
+      letter-spacing: 2px;
+      line-height: 1.25em;
+      text-align: right;
+      padding-right: 30px;
+      margin-bottom: 16px;
+    }
+}
+.tweet-up {
+    text-indent: -4000px;
+    background: url(/static/images/status/button_twitter.png) 0 0;
+    width: 165px;
+    height: 31px;
+    display: inline-block;
+    &:hover {
+        background-position: -165px 0;
+    }
+}
+.uptime {
+    background-color: @white;
+    ul, li {
+        padding: 0;
+    }
+    li {
+        padding: 50px 0;
+        font-size: 13px;
+        display: table-cell;
+        border-left: 2px solid #b3b3b3;
+        vertical-align: middle;
+        &:first-child {
+            text-align: center;
+            width: 225px;
+            border-left: 0;
+        }
+        &.API, &.JS, &.DASH {
+            h1 {
+                font-size: 48px;
+                color: #999;
+                font-family: @boldFontFamily;
+                span {
+                    font-size: 20px;
+                    vertical-align: top;
+                    display: inline-block;
+                    padding-left: 5px;
+                }
+            }
+        }
+        &.API {
+            padding-left: 25px;
+            width: 242px - 25px;
+        }
+        &.JS {
+            padding-left: 25px;
+            width: 242px - 25px;
+        }
+        &.DASH {
+            width: auto;
+            padding-left: 25px;
+        }
+    }
+    h3 {
+      font-size: 14px;
+      color: black;
+      text-transform: uppercase;
+      font-family: 'NimbusSanNov-Bla';
+      letter-spacing: 2px;
+      line-height: 1.25em;
+      text-align: right;
+      padding-right: 30px;
+    }
+}
+
+div.messages {
+    background: url(/static/images/stripe-background-clear.png) 0 0;
+    padding-bottom: 40px;
+
+    ul {
+    }
+    li {
+        list-style: none;
+        line-height: auto;
+        &>div {
+            display: table-cell;
+            position: relative;
+            border-left: 2px solid #b3b3b3;
+            vertical-align: top;
+        }
+        .API > div, .JS > div, .DASH > div {
+            border-left: 8px solid #d9d9d9;
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            top: 0;
+        }
+        &:nth-child(even) {
+            .API > div, .JS > div, .DASH > div {
+                border-left: 8px solid #c7c7c7;
+            }
+        }
+        .date {
+            width: 195px;
+            text-align: right;
+            font-size: 26px;
+            color: #999;
+            font-family: @lightFontFamily;
+            border-left: 0;
+            padding: 13px 30px 13px 0;
+        }
+        .API {
+            width: 242px;
+        }
+        .JS {
+            width: 242px;
+        }
+        .DASH {
+            width: auto;
+        }
+        &.messages > .issues > div {
+            position: static;
+            float: left;
+            clear: both;
+        }
+        &.issues {
+            .date {
+                color: #000;
+                font-family: @boldFontFamily;
+            }
+            .API.errors > div, .JS.errors > div, .DASH.errors > div {
+                border-left: 8px solid #ef4135;
+            }
+            .API.issues > div, .JS.issues > div, .DASH.issues > div {
+                border-left: 8px solid #eebd60;
+            }
+            &:nth-child(odd) {
+                .API.issues > div, .JS.issues > div, .DASH.issues > div {
+                    border-left: 8px solid #E7A614;
+                }
+
+                .API.errors > div, .JS.errors > div, .DASH.errors > div {
+                    border-left: 8px solid #f47e64;
+                }
+            }
+        }
+
+    }
+    .API .issue, .JS .issue {
+        min-width: 194px;
+    }
+    .issue {
+        background-color: #000;
+        margin: 0 10px 10px;
+        padding: 10px;
+        border-radius: 4px;
+        time {
+            font-family: @bitter;
+            font-size: 11px;
+            font-style: italic;
+            color: #fff;
+        }
+        p, em {
+            font-family: @romanFontFamily;
+            font-size: 13px;
+            color: #b3b3b3;
+        }
+        .tweet {
+            text-indent: -4000px;
+            background: url(/static/images/status/icon_twitter_sm.png) 0 0;
+            width: 15px;
+            height: 10px;
+            display: inline-block;
+            margin-left: 20px;
+        }
+    }
+    .load {
+      border-top: 1px solid #d9d9d9;
+      border-bottom: 1px solid #d9d9d9;
+      background-color: #f7f7f7;
+      text-align: center;
+      padding: 10px 0;
+      button {
+        .roundedButton();
+      }
+    }
+}

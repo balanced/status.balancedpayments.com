@@ -1,0 +1,107 @@
+// Variables.less
+// Variables to customize the look and feel of Bootstrap
+// -----------------------------------------------------
+
+
+
+// GLOBAL VALUES
+// --------------------------------------------------
+
+// Links
+@linkColor:             #58595b;
+@linkColorHover:        #78A22F;
+
+// Grays
+@black:                 #000;
+@grayDarker:            #222;
+@grayDark:              #333;
+@gray:                  #555;
+@grayLight:             #999;
+@grayLighter:           #eee;
+@white:                 #fff;
+
+// Accent colors
+@blue:                  #049cdb;
+@blueDark:              #0064cd;
+@green:                 #46a546;
+@red:                   #ef4135;
+@yellow:                #ffc40d;
+@orange:                #f89406;
+@pink:                  #c3325f;
+@purple:                #7a43b6;
+
+// Typography
+@baseFontSize:          13px;
+@baseFontFamily:        "Helvetica Neue", Helvetica, Arial, sans-serif;
+@baseLineHeight:        18px;
+@textColor:             @grayDark;
+@lightFontFamily:       'Helvetica Neue LT Std', 'HelveticaNeue-Light', 'Helvetica Neue Light', Arial, sans-serif;
+@lightFontFamily:       'HelveticaNeue-Light', 'Helvetica Neue Light', Arial, sans-serif;
+@mediumFontFamily:       'HelveticaNeue-Medium', 'Helvetica Neue Medium', Arial, sans-serif;
+@standardFontFamily:       'HelveticaNeue', 'Helvetica Neue', Arial, sans-serif;
+@romanFontFamily:       'HelveticaNeue-Roman', 'Helvetica Neue Roman', Arial, sans-serif;
+@heavyFontFamily:       'HelveticaNeue-Black', 'Helvetica Neue Black', Arial, sans-serif;
+@boldFontFamily:       'HelveticaNeue-Bold', 'Helvetica Neue Bold', Arial, sans-serif;
+
+// Buttons
+@primaryButtonBackground:    @linkColor;
+
+
+
+// COMPONENT VARIABLES
+// --------------------------------------------------
+
+// Z-index master list
+// Used for a bird's eye view of components dependent on the z-axis
+// Try to avoid customizing these :)
+@zindexDropdown:        1000;
+@zindexPopover:         1010;
+@zindexTooltip:         1020;
+@zindexFixedNavbar:     1030;
+@zindexModalBackdrop:   1040;
+@zindexModal:           1050;
+
+// Input placeholder text color
+@placeholderText:       @grayLight;
+
+// Navbar
+@navbarHeight:                    40px;
+@navbarBackground:                #4D4D4D;
+@navbarBackgroundHighlight:       @grayDark;
+
+@navbarText:                      #d9d9d9;
+@navbarLinkColor:                 #d9d9d9;
+@navbarLinkColorHover:            @white;
+@navbarLinkBorderColor:           #7A7A7A;
+
+// Form states and alerts
+@warningText:             #c09853;
+@warningBackground:       #fcf8e3;
+@warningBorder:           darken(spin(@warningBackground, -10), 3%);
+
+@errorText:               #EF4135;
+@errorBackground:         #FDF5E6;
+@errorBorder:             darken(spin(@errorBackground, -10), 3%);
+
+@successText:             @white;
+@successBackground:       #78A22F;
+@successBorder:           darken(spin(@successBackground, -10), 5%);
+
+@infoText:                #3a87ad;
+@infoBackground:          #d9edf7;
+@infoBorder:              darken(spin(@infoBackground, -10), 7%);
+
+
+
+// GRID
+// --------------------------------------------------
+
+// Default 940px grid
+@gridColumns:             12;
+@gridColumnWidth:         60px;
+@gridGutterWidth:         20px;
+@gridRowWidth:            (@gridColumns * @gridColumnWidth) + (@gridGutterWidth * (@gridColumns - 1));
+
+// Fluid grid
+@fluidGridColumnWidth:    6.382978723%;
+@fluidGridGutterWidth:    2.127659574%;

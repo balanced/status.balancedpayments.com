@@ -1,0 +1,9 @@
+{
+    "name":"balanced-status-js",
+    "version":"0.0.1",
+    "dependencies":{
+        "async":"0.1.x",
+        "uglify-js": "1.3.x",
+        "less": "1.x"
+    }
+}

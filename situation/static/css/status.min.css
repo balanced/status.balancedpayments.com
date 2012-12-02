@@ -1,0 +1,51 @@
+
+@font-face{font-family:'NimbusSanNov-Reg';src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_0_0.eot');src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_0_0.eot?#iefix') format('embedded-opentype'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_0_0.woff') format('woff'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_0_0.ttf') format('truetype');}@font-face{font-family:'NimbusSanNov-Bla';src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_1_0.eot');src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_1_0.eot?#iefix') format('embedded-opentype'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_1_0.woff') format('woff'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_1_0.ttf') format('truetype');}@font-face{font-family:'NimbusSanNov-Med';src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_2_0.eot');src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_2_0.eot?#iefix') format('embedded-opentype'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_2_0.woff') format('woff'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_2_0.ttf') format('truetype');}@font-face{font-family:'NimbusSanNov-Bol';src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_3_0.eot');src:url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_3_0.eot?#iefix') format('embedded-opentype'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_3_0.woff') format('woff'),url('https://d3n06lmttbcmxe.cloudfront.net/css/fonts//241122_3_0.ttf') format('truetype');}body{background-color:black;margin:90px auto 0;}
+#balanced-status-logo{display:block;margin:0 auto 50px;}
+.stc>*{width:940px;margin:0 auto;}
+.uptime-image{display:block;text-indent:-4000px;width:156px;height:156px;margin:auto;position:relative;}.uptime-image.UP{background:url(/static/images/status/icon_UP.png) 0 0 no-repeat;}
+.uptime-image.DOWN{background:url(/static/images/status/icon_DOWN.png) 0 0 no-repeat;}
+.uptime-image.ISSUE{background:url(/static/images/status/icon_ISSUE.png) 0 0 no-repeat;}
+.summary{text-align:center;}.summary h2{background-color:#1a1a1a;display:inline-block;width:auto;padding:0 30px;width:365px;border-top:1px dotted #b3b3b3;border-bottom:1px dotted #b3b3b3;margin-bottom:60px;}
+.summary .as-of{display:inline-block;font-size:14px;color:black;text-transform:uppercase;font-family:'NimbusSanNov-Bla';letter-spacing:2px;text-align:right;padding-right:20px;color:#999;vertical-align:middle;}
+.summary time{font-size:13px;color:white;font-family:'Bitter',serif;font-weight:normal;vertical-align:middle;}
+.services ul,.services li{padding:0;text-align:center;}
+.services li{display:inline-block;width:240px;height:295px;margin:auto;position:relative;}.services li h3{margin:0 auto 35px;background-color:white;font-family:'Bitter',serif;font-weight:600;font-size:13px;border-radius:5px;width:130px;position:relative;}
+.services svg{position:absolute;width:240px;height:295px;left:0;}
+.services path{stroke:#808080;fill:#808080;}
+.services img{position:relative;}
+.recent-updates{background-color:#e6e7e8;}.recent-updates ul,.recent-updates li{padding:0;}
+.recent-updates li{padding-top:27px;padding-bottom:30px;font-size:13px;display:table-cell;border-left:2px solid #b3b3b3;vertical-align:top;}.recent-updates li:first-child{text-align:center;width:225px;border-left:0;}
+.recent-updates li.API{padding-left:25px;padding-right:25px;width:192px;}
+.recent-updates li.JS{padding-left:25px;padding-right:25px;width:192px;}
+.recent-updates li.DASH{width:auto;padding-left:25px;}
+.recent-updates p,.recent-updates em{font-family:'HelveticaNeue-Roman','Helvetica Neue Roman',Arial,sans-serif;font-size:14px;color:#666;}
+.recent-updates .tweet{text-indent:-4000px;background:url(/static/images/status/icon_twitter_sm.png) 0 0;width:15px;height:10px;display:inline-block;margin-left:20px;}
+.recent-updates time{font-family:'Bitter',serif;font-size:11px;font-style:italic;color:#000;}
+.recent-updates h3{font-size:14px;color:black;text-transform:uppercase;font-family:'NimbusSanNov-Bla';letter-spacing:2px;line-height:1.25em;text-align:right;padding-right:30px;margin-bottom:16px;}
+.tweet-up{text-indent:-4000px;background:url(/static/images/status/button_twitter.png) 0 0;width:165px;height:31px;display:inline-block;}.tweet-up:hover{background-position:-165px 0;}
+.uptime{background-color:#ffffff;}.uptime ul,.uptime li{padding:0;}
+.uptime li{padding:50px 0;font-size:13px;display:table-cell;border-left:2px solid #b3b3b3;vertical-align:middle;}.uptime li:first-child{text-align:center;width:225px;border-left:0;}
+.uptime li.API h1,.uptime li.JS h1,.uptime li.DASH h1{font-size:48px;color:#999;font-family:'HelveticaNeue-Bold','Helvetica Neue Bold',Arial,sans-serif;}.uptime li.API h1 span,.uptime li.JS h1 span,.uptime li.DASH h1 span{font-size:20px;vertical-align:top;display:inline-block;padding-left:5px;}
+.uptime li.API{padding-left:25px;width:217px;}
+.uptime li.JS{padding-left:25px;width:217px;}
+.uptime li.DASH{width:auto;padding-left:25px;}
+.uptime h3{font-size:14px;color:black;text-transform:uppercase;font-family:'NimbusSanNov-Bla';letter-spacing:2px;line-height:1.25em;text-align:right;padding-right:30px;}
+div.messages{background:url(/static/images/stripe-background-clear.png) 0 0;padding-bottom:40px;}
+div.messages li{list-style:none;line-height:auto;}div.messages li>div{display:table-cell;position:relative;border-left:2px solid #b3b3b3;vertical-align:top;}
+div.messages li .API>div,div.messages li .JS>div,div.messages li .DASH>div{border-left:8px solid #d9d9d9;position:absolute;left:0;bottom:0;top:0;}
+div.messages li:nth-child(even) .API>div,div.messages li:nth-child(even) .JS>div,div.messages li:nth-child(even) .DASH>div{border-left:8px solid #c7c7c7;}
+div.messages li .date{width:195px;text-align:right;font-size:26px;color:#999;font-family:'HelveticaNeue-Light','Helvetica Neue Light',Arial,sans-serif;border-left:0;padding:13px 30px 13px 0;}
+div.messages li .API{width:242px;}
+div.messages li .JS{width:242px;}
+div.messages li .DASH{width:auto;}
+div.messages li.messages>.issues>div{position:static;float:left;clear:both;}
+div.messages li.issues .date{color:#000;font-family:'HelveticaNeue-Bold','Helvetica Neue Bold',Arial,sans-serif;}
+div.messages li.issues .API.errors>div,div.messages li.issues .JS.errors>div,div.messages li.issues .DASH.errors>div{border-left:8px solid #ef4135;}
+div.messages li.issues .API.issues>div,div.messages li.issues .JS.issues>div,div.messages li.issues .DASH.issues>div{border-left:8px solid #eebd60;}
+div.messages li.issues:nth-child(odd) .API.issues>div,div.messages li.issues:nth-child(odd) .JS.issues>div,div.messages li.issues:nth-child(odd) .DASH.issues>div{border-left:8px solid #E7A614;}
+div.messages li.issues:nth-child(odd) .API.errors>div,div.messages li.issues:nth-child(odd) .JS.errors>div,div.messages li.issues:nth-child(odd) .DASH.errors>div{border-left:8px solid #f47e64;}
+div.messages .API .issue,div.messages .JS .issue{min-width:194px;}
+div.messages .issue{background-color:#000;margin:0 10px 10px;padding:10px;border-radius:4px;}div.messages .issue time{font-family:'Bitter',serif;font-size:11px;font-style:italic;color:#fff;}
+div.messages .issue p,div.messages .issue em{font-family:'HelveticaNeue-Roman','Helvetica Neue Roman',Arial,sans-serif;font-size:13px;color:#b3b3b3;}
+div.messages .issue .tweet{text-indent:-4000px;background:url(/static/images/status/icon_twitter_sm.png) 0 0;width:15px;height:10px;display:inline-block;margin-left:20px;}
+div.messages .load{border-top:1px solid #d9d9d9;border-bottom:1px solid #d9d9d9;background-color:#f7f7f7;text-align:center;padding:10px 0;}div.messages .load button{font-weight:bold;font-size:12px;border:0;border-radius:16px;background-color:#78A22F;color-profile:white;color:white;-webkit-box-shadow:inset 0px 0px 1px 0px rgba(117, 117, 117, 0.3);-moz-box-shadow:inset 0px 0px 1px 0px rgba(117, 117, 117, 0.3);box-shadow:inset 0px 0px 1px 0px rgba(117, 117, 117, 0.3);display:inline-block;padding:2px 15px;margin:8px;text-transform:uppercase;height:auto;letter-spacing:2px;border:2px solid #698e29;}div.messages .load button:hover{background:#96B45B;border-color:#78A22F;box-shadow:none;}
