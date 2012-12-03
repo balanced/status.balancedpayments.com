@@ -73,6 +73,7 @@ def require_basic_auth(method):
         else:
             if (username, password) != settings.HTTP_AUTH:
                 return fail_basic_auth()
+        self.auth = (username, password)
         return method(self, *args)
     return http_basic_auth
 

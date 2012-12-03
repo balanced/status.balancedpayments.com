@@ -39,3 +39,8 @@ additionally if the number of successful requests served in the last *5*
 minutes drops below *99%* then the system will automatically go into an `ISSUE`
 state, if the number of successful requests in the same period drops below
 *90%* then the system will be in the `DOWN` state.
+
+
+## Deploying
+
+    appcfg.py update balancedstatus2
