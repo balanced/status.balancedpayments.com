@@ -2,17 +2,151 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Balanced</title>
+    <title>Balanced Status</title>
     <link rel="shortcut icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAB50RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNS4xqx9I6wAAAStJREFUWIXtlT1SwzAQRp+YHMAeGsrcIGlc4yukpDHODaBLF6dzB5yAkIYyOYJSu/INUtIw9g1MgZhhZJlITogbfZ12Pu2+0c+uaJqGIXU1aHUP4AGAkR4QQlDF0Rh4BWKgBl5CWWQuiRebyROQAgEggXmelAf913WdwFYVRyVYVnGUOhRPgQe1F5Vra/K2AKo4CoCpwXtvC9DhnS42k/FRgD9Un+rNk/JwFCCURc33nel6cwAweXcmY9cJzICVApHALJSFMYFJeVLuVI6f/c/A3OQV+qsUQtjW6SXbX3AxeQAP4AFa09BWH+/XGXCrlvubu8+sT55ejUgVX2rhlQ3EuRqRadq5TMuTAQLL2L8BmAaT9bA6B8AjsP61XquYs1qP8NIavA94AA/wBRJiTbdsTuB4AAAAAElFTkSuQmCC" type="image/x-icon">
-    <link href='https://fonts.googleapis.com/css?family=Bitter:400,700,400italic' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="/static/css/bootstrap-2.0.css">
+    <link href="//fonts.googleapis.com/css?family=Bitter:400,700,400italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Droid+Serif:400italic" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/css/base.css">
 </head>
 <body>
-<a href="https://www.balancedpayments.com"><img src="https://d3n06lmttbcmxe.cloudfront.net/images/status/balanced_status_logo.png" id="balanced-status-logo"></a>
+
+<div id="subscribe">
+    <div class="content">
+        <header>
+            <p>Notify me of incidents and updates via:</p>
+        </header>
+
+        <!-- No e-mail notification yet
+        <section id="email">
+            <a class="section-toggle">
+                <div class="title">
+                    Email
+                    <span class="caret pull-right"></span>
+                </div>
+            </a>
+            <div class="section-content">
+                <div class="control-group">
+                    <div class="controls">
+                        <input id="e-email" type="text" placeholder="email@domain.com" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="e-subscribe[]" value="API">API incidents
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="e-subscribe[]" value="JS">Balanced.js incidents
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="e-subscribe[]" value="DASHBOARD">Dashboard incidents
+                        </label>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="control-group pull-right">
+                    <div class="controls">
+                        <button id="e-submit" class="btn">Subscribe</button>
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="result subscribed">
+                    <i class="icon-ok-sign"></i> Successfully subscribed.
+                </div>
+            </div>
+        </section>
+        -->
+
+        <section id="sms">
+            <a class="section-toggle">
+                <div class="title">
+                    SMS
+                    <span class="caret pull-right"></span>
+                </div>
+            </a>
+            <div class="section-content">
+                <p class="our-number">
+                    Notifications will come from <strong>+1 415 408 5445</strong>.
+                </p>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <input id="sms-phone" type="text" placeholder="+1 555 123 4567" />
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="sms-subscribe[]" value="API">API incidents
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="sms-subscribe[]" value="JS">Balanced.js incidents
+                        </label>
+                        <label class="checkbox">
+                            <input type="checkbox" name="sms-subscribe[]" value="DASHBOARD">Dashboard incidents
+                        </label>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="control-group pull-right">
+                    <div class="controls">
+                        <button id="sms-submit" class="btn">Subscribe</button>
+                    </div>
+                </div>
+                <div class="clear"></div>
+
+                <div class="result subscribed">
+                    <i class="icon-ok-sign"></i> Successfully subscribed.
+                </div>
+
+                <div class="result error">
+                    <i class="icon-warning-sign"></i> <span></span>
+                </div>
+            </div>
+        </section>
+
+        <section id="twitter">
+            <a class="section-toggle">
+                <div class="title">
+                    Twitter
+                    <span class="caret pull-right"></span>
+                </div>
+            </a>
+            <div class="section-content">
+                <p>Follow status updates on Twitter:</p>
+                <p class="twitter">
+                    <a href="https://twitter.com/@balancedstatus">
+                        <i class="icon-twitter"></i> @balancedstatus
+                    </a>
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <a class="base">
+        <div class="icon"></div>
+        <div class="copy">Subscribe to notifications</div>
+    </a>
+</div>
+
+<div class="logo">
+    <a href="https://www.balancedpayments.com">
+        <img src="https://d3n06lmttbcmxe.cloudfront.net/images/status/balanced_status_logo.png" alt="Balanced">
+    </a>
+</div>
 
 <div class="stc summary">
-    <h2><span class="as-of">Status as of</span> <time datetime="">--</time></h2>
+    <h2>
+        <span class="as-of">Status as of</span> <time datetime="">--</time>
+    </h2>
 </div>
 
 <div class="services stc">
@@ -94,8 +228,10 @@
         <button>Load more</button>
     </div>
 </div>
+
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 <script type="text/javascript" src="/static/js/status.min.js"></script>
+
 <script type="text/javascript">
     //  kick everything off when jquery is ready
     $(function () {

@@ -41,3 +41,4 @@ node_modules/
 */less/*css
 */less/*/*css
 .DS_Store
+situation/settings.py.production

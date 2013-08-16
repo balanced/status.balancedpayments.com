@@ -10,10 +10,30 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
+- kind: EmailSubscriber
+  properties:
+  - name: created_at
+    direction: desc
+  - name: email
+  - name: services
+
 - kind: KV
   properties:
   - name: k
   - name: value
+
+- kind: SMSSubscriber
+  properties:
+  - name: created_at
+    direction: desc
+  - name: phone
+  - name: services
+
+- kind: ServiceStatus
+  properties:
+  - name: service
+  - name: current
+  - name: down_count
 
 - kind: Tweet
   properties:

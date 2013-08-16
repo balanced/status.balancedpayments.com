@@ -9,14 +9,15 @@ The status page consists of several sections:
   requests over the last 30 days
 * The middle portion displays informational messages
 * The lower portion displays issues with behavior
+* The top left hand corner allows users to subscribe to notifications on service UP and DOWN via SMS
 
 ## Message Display Behavior
 
-Messages are fed into the system via the @balancedstatus Twitter account. 
+Messages are fed into the system via the @balancedstatus Twitter account.
 
 Messages take the format
 
-`<SYSTEM>-<STATE>: <MESSAGE>`; e.g. 
+`<SYSTEM>-<STATE>: <MESSAGE>`; e.g.
 
 * `DASH-UP: Everything is back to normal`
 * `API-ISSUE: We are experiencing problems`
@@ -40,6 +41,10 @@ minutes drops below *99%* then the system will automatically go into an `ISSUE`
 state, if the number of successful requests in the same period drops below
 *90%* then the system will be in the `DOWN` state.
 
+
+## Testing
+
+    python tests/__init__.py /usr/local/google_appengine/ tests
 
 ## Deploying
 

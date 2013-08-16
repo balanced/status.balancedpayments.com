@@ -25,12 +25,18 @@ import time
 import webapp2
 from google.appengine.api import memcache
 from google.appengine.ext.webapp import template
+from google.appengine.ext import db
+
+from twilio.rest import TwilioException
 
 import encoding
+import json
 import settings
 import tweeter
 import uptime
-
+import models
+import sms
+import subscription
 
 LOGGER = logging.getLogger(__name__)
 
@@ -41,6 +47,7 @@ def cache(method, seconds=60 * 60 * 24):
     def wrapped(handler, *a, **kw):
         key = (handler.request.path.replace('/', '') +
                handler.request.query_string)
+
         data = memcache.get(key)
         if not data:
             LOGGER.info('CACHE miss')
@@ -79,6 +86,7 @@ def require_basic_auth(method):
 
 
 class TwitterBaseController(webapp2.RedirectHandler):
+
     def __init__(self, *a, **kw):
         super(TwitterBaseController, self).__init__(*a, **kw)
         self.tweet_manager = tweeter.TwitterStatusProcessor(
@@ -90,7 +98,12 @@ class TwitterHandler(TwitterBaseController):
 
     def get(self, service=None, **_):
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(self._get(service))
+
+        # Required for Google App engine cron, since they don't support POST
+        if self.request.get('_method') and self.request.get('_method') == 'post':
+            self.post()
+        else:
+            self.response.out.write(self._get(service))
 
     @cache
     def _get(self, service):
@@ -102,7 +115,6 @@ class TwitterHandler(TwitterBaseController):
             'messages': [encoding.to_dict(m) for m in tweets]
         })
 
-    @require_basic_auth
     def post(self):
         self.tweet_manager.run()
         keys = [
@@ -146,6 +158,7 @@ class TwitterMessageHandler(TwitterBaseController):
 
 
 class TwitterLatestMessageHandler(TwitterBaseController):
+
     """
     Mounted at /twitter/messages/latest
     GET returns a dictionary of messages by service
@@ -179,18 +192,25 @@ class TwitterLatestMessageHandler(TwitterBaseController):
 
 
 class UptimeHandler(TwitterBaseController):
+
     """
     Mounted at /uptime
     GET returns a dictionary of uptime for the various services
     POST deletes cached results, the subsequent GET will re-populate the cache
     """
+
     def __init__(self, request, method):
         super(UptimeHandler, self).__init__(request, method)
         self.uptime_manager = uptime.Calculator(**settings.UPTIME)
 
     def get(self, *a, **kw):
         self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(self._get())
+
+        # Required for Google App engine cron, since they don't support POST
+        if self.request.get('_method') and self.request.get('_method') == 'post':
+            self.post()
+        else:
+            self.response.out.write(self._get())
 
     @cache
     def _get(self):
@@ -203,14 +223,21 @@ class UptimeHandler(TwitterBaseController):
             # if a service is UP and a tweet says it's down, then the down
             # takes precedence
             _s = raw['uptime'][service]
+
             if _s['status'] == 'UP':
                 tweet_state = self.tweet_manager.get_latest_state(
                     service
                 )
                 _s['status'] = tweet_state or _s['status']
+
+            # This is filthy. Don't judge me bro
+            if service == "DASH":
+                service = "DASHBOARD"
+
+            subscription.should_notify(service, _s['status'])
+
         return encoding.to_json(raw)
 
-    @require_basic_auth
     def post(self):
         key = self.request.path.replace('/', '')
         memcache.delete(key)
@@ -220,15 +247,97 @@ class UptimeHandler(TwitterBaseController):
 
 
 class MainHandler(webapp2.RequestHandler):
+
     """
     Serves the index.html, that's it.
     """
+
     def get(self, *a, **kw):
         path = os.path.join(
             os.path.dirname(__file__),
             'templates',
             'index.html')
         self.response.out.write(template.render(path, {}))
+
+
+class SubscribeEmailHandler(webapp2.RequestHandler):
+
+    def post(self):
+        self.response.headers['Content-Tyspe'] = 'application/json'
+
+        email = self.request.get('email')
+        services = self.request.get('services').rstrip(',')
+
+        query = db.GqlQuery(
+            "SELECT * FROM EmailSubscriber WHERE email = :1",
+            email)
+
+        number_rows = query.count()
+
+        if number_rows > 0:
+            self.response.status = 409
+            self.response.out.write(json.dumps({
+                "error": email + " is already subscribed."
+            }))
+            return
+
+        s = models.EmailSubscriber(email=email,
+                                   services=services.split(','))
+
+        s.put()
+
+        self.response.out.write(json.dumps({
+            "subscribed": "email",
+            "services": services.split(',')
+        }))
+
+
+class SubscribeSMSHandler(webapp2.RequestHandler):
+
+    def post(self):
+        self.response.headers['Content-Type'] = 'application/json'
+
+        phone = self.request.get('phone').replace(' ', '').replace(
+            '-', '').replace('(', '').replace(')', '')
+
+        services = self.request.get('services').rstrip(',')
+
+        query = db.GqlQuery(
+            "SELECT * FROM SMSSubscriber WHERE phone = :1",
+            phone)
+
+        number_rows = query.count()
+
+        if number_rows > 0:
+            self.response.status = 409
+            self.response.out.write(json.dumps({
+                "error": phone + " is already subscribed."
+            }))
+            return
+
+        txt = sms.SMS()
+        try:
+            txt.send(phone,
+                     "Successfully subscribed to Balanced "
+                     + services +
+                     " incidents. Reply with STOP to unsubscribe.")
+
+        except TwilioException, e:
+            self.response.status = 400
+            self.response.out.write(json.dumps({
+                "error": e.msg
+            }))
+            return
+
+        s = models.SMSSubscriber(phone=phone,
+                                 services=services.split(','))
+
+        s.put()
+
+        self.response.out.write(json.dumps({
+            "subscribed": "sms",
+            "services": services.split(',')
+        }))
 
 
 app = webapp2.WSGIApplication([
@@ -238,4 +347,6 @@ app = webapp2.WSGIApplication([
     ('/twitter/messages', TwitterMessageHandler),
     ('/twitter/messages/latest', TwitterLatestMessageHandler),
     ('/twitter/(.*)', TwitterHandler),
+    ('/subscribe/email', SubscribeEmailHandler),
+    ('/subscribe/sms', SubscribeSMSHandler)
 ], debug=settings.DEBUG)

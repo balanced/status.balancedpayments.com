@@ -6,7 +6,6 @@ var DISPLAYABLE_STATUSES = ['UP', 'DOWN', 'ISSUE'];
 var ERROR_STATE = 'DOWN';
 
 var loadData = function () {
-    console.log('loading');
     loadUptime();
     loadMessages();
     loadCalendar();
@@ -31,7 +30,6 @@ var setServiceStatus = function (service, status) {
 var loadUptime = function () {
     //  actual uptime of services
     $.get('/uptime', function (d) {
-        console.log('uptime', d);
         for (var service in d.uptime) {
             var num = d.uptime[service].uptime;
             var status = d.uptime[service].status;
@@ -74,8 +72,6 @@ var loadCalendar = function (offset) {
 
         delete d.messages.max;
         delete d.messages.min;
-
-        console.log('tweets', d, min, max);
 
         var $root = $('.messages.stc ul');
         var $items = $root.find('li');

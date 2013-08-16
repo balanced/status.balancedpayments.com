@@ -1,8 +1,9 @@
-application: situation-demo
+application: situation-staging
 version: 1
 runtime: python27
 api_version: 1
 threadsafe: yes
+default_expiration: "12h"
 
 handlers:
 - url: /favicon\.ico

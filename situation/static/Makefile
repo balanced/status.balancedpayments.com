@@ -3,11 +3,14 @@ JS_COMPRESSOR = ./node_modules/uglify-js/bin/uglifyjs
 CSS_COMPRESSOR = ./node_modules/less/bin/lessc --compress
 
 JS_SOURCES = js/balanced.lib.src.js \
-             js/status.src.js
-CSS_SOURCES = less/bootstrap-2.0/variables.less \
-              less/bootstrap-2.0/mixins.less \
+             js/status.src.js \
+             js/subscribe.src.js
+
+CSS_SOURCES = less/bootstrap-2.0/mixins.less \
+			  less/bootstrap-2.0/variables.less \
               less/variables.less \
-              less/base.less
+              less/base.less \
+              less/subscribe.less
 
 all: node_modules \
     js/status.min.js \
