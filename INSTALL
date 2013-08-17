@@ -1,25 +1,29 @@
 
 Before you begin, make sure you've got [Google App Engine SDK](https://developers.google.com/appengine/downloads) installed.
 
+You'll need a Twitter account, with development API keys, and a Twilio account for sending SMS notifications.
+
 1. Get the code
 
         git clone https://github.com/balanced/status.balancedpayments.com.git
         cd status.balancedpayments.com
 
-2. Run the local development server
+2. Update `situation/settings.py` and provide your Twitter and Twilio API credentials. Also, update the email sender to your desired address. NOTE: You must add the sender e-mail address into Google App Engine as an administrator of the application. Read further details at (https://developers.google.com/appengine/docs/python/mail/)
+
+3. Run the local development server
 
         dev_appserver.py situation/
 
-3. Visit [http://localhost:8000/](http://localhost:8000/) to view the page
-4. To pull data from our test Twitter account, run this curl command
+4. Visit [http://localhost:8000/](http://localhost:8000/) to view the page
 
-        curl http://localhost:8000/twitter -d update=1 -u username:password
+5. To pull data from our test Twitter account, run this curl command
 
-5. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml#L1), change the name of the app (`situation-demo`) to your own app name and then run
+        curl http://localhost:8000/twitter -d "" -u username:password
+
+6. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml#L1), change the name of the app (`situation-staging`) to your own app name and then run
 
         appcfg.py update situation/
 
 If you want to use this for your own, you'll need to point it at your own graphite server and add your own Twitter app credentials into [settings.py](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/settings.py#L6).
 
-Finally, you'll need to setup a cron job or some other sort of scheduled task which will `POST` to the `/twitter` and `/uptime` URLs to pull data into the system.
-
+Finally, you'll need to setup a cron job or some other sort of scheduled task which will `POST` to the `/twitter` and `/uptime` URLs to pull metrics into the system.

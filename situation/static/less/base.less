@@ -1,12 +1,22 @@
+/* Bootstrap less */
+@import "bootstrap-2.0/variables.less";
+@import "bootstrap-2.0/mixins.less";
+@import "bootstrap-2.0/reset.less";
+@import "bootstrap-2.0/scaffolding.less";
+@import "bootstrap-2.0/grid.less";
+@import "bootstrap-2.0/layouts.less";
+@import "bootstrap-2.0/type.less";
+@import "bootstrap-2.0/forms.less";
+@import "bootstrap-2.0/dropdowns.less";
+@import "bootstrap-2.0/alerts.less";
+@import "bootstrap-2.0/utilities.less";
 
-@import "bootstrap-2.0/mixins";
-@import "bootstrap-2.0/variables";
-@import "variables";
-
+/* Our less */
+@import "variables.less";
+@import "subscribe.less";
 
 @bitter: 'Bitter', serif;
 @pageWidth: 940px;
-
 
 .roundedButton() {
   font-weight: bold;
@@ -31,15 +41,36 @@
   }
 }
 
+.control-group {
+    &.error {
+        input {
+            background-color: @white;
+        }
+
+        label.checkbox {
+            color: #ef4135 !important;
+        }
+    }
+}
 
 body {
     background-color: black;
     margin: 90px auto 0;
 }
 
-#balanced-status-logo {
+.clear {
+    clear: both;
+}
+
+hr {
+    border-bottom: 1px solid @gray3;
+    border-top: 0px;
+}
+
+.logo {
     display: block;
-    margin: 0 auto 50px;
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 // status container

@@ -1,0 +1,242 @@
+#subscribe {
+    background-color: @gray6;
+    padding: 0px;
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 25px;
+    font-family: 'NimbusSanNov-Med';
+    width: 318px;
+    z-index: 999999;
+
+    &:after {
+        content: " ";
+        display: block;
+        position: relative;
+        top: 35px;
+        left: 40px;
+        width: 100%;
+        height: 20px;
+        background: linear-gradient(@gray6 0%, transparent 0%), linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent linear-gradient(45deg, black 33.33%, @gray6 33.33%) 0 0%;
+        background: -webkit-linear-gradient(@gray6 0%, transparent 0%), -webkit-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -webkit-linear-gradient(45deg, black 33.33%, @gray6 33.33%) 0 0%;
+        background: -o-linear-gradient(@gray6 0%, transparent 0%), -o-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -o-linear-gradient(45deg, black 33.33%, @gray6 33.33%) 0 0%;
+        background: -moz-linear-gradient(@gray6 0%, transparent 0%), -moz-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -moz-linear-gradient(45deg, black 33.33%, @gray6 33.33%) 0 0%;
+        background-repeat: repeat-x;
+        background-size: 0px 100%, 7px 7px, 7px 7px;
+        margin-left: -40px;
+        z-index: 10;
+    }
+
+    a {
+        cursor: pointer;
+    }
+
+    .base {
+        .icon {
+            padding: 0px;
+            float: left;
+            height: 40px;
+            width: 40px;
+            background: @egyptianBlue100 url(/static/images/status-icon.png) no-repeat 0 0;
+
+            &:after {
+                content: " ";
+                display: block;
+                position: relative;
+                top: 35px;
+                left: 0px;
+                width: 100%;
+                height: 20px;
+                background: linear-gradient(@egyptianBlue100 0%, transparent 0%), linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent linear-gradient(45deg, black 33.33%, @egyptianBlue100 33.33%) 0 0%;
+                background: -webkit-linear-gradient(@egyptianBlue100 0%, transparent 0%), -webkit-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -webkit-linear-gradient(45deg, black 33.33%, @egyptianBlue100 33.33%) 0 0%;
+                background: -o-linear-gradient(@egyptianBlue100 0%, transparent 0%), -o-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -o-linear-gradient(45deg, black 33.33%, @egyptianBlue100 33.33%) 0 0%;
+                background: -moz-linear-gradient(@egyptianBlue100 0%, transparent 0%), -moz-linear-gradient(135deg, black 33.33%, transparent 33.33%) 0 0%, transparent -moz-linear-gradient(45deg, black 33.33%, @egyptianBlue100 33.33%) 0 0%;
+                background-repeat: repeat-x;
+                background-size: 0px 100%, 7px 7px, 7px 7px;
+                z-index: 20;
+            }
+        }
+
+        .copy {
+            padding: 10px 20px;
+            float: right;
+            color: @white;
+            font-family: 'NimbusSanNov-Bol';
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            width: 238px;
+
+            &.close-content {
+                color: @gray5;
+                font-size: 12px;
+                float: left;
+            }
+        }
+    }
+
+    .content {
+        display: none;
+        background-color: white;
+        z-index: 30;
+
+        p {
+            font-size: 14px;
+        }
+
+        header {
+            padding: 20px;
+            background-color: @egyptianBlue100;
+            border-bottom: 1px solid @borders;
+
+            p {
+                color: @white;
+                font-family: 'NimbusSanNov-Med';
+                margin-bottom: 0px;
+            }
+        }
+
+        section {
+            background-color: @egyptianBlue100;
+            border-bottom: 1px solid @borders;
+
+            &:hover {
+                background-color: @egyptianBlue60;
+            }
+
+            a, a:active, a:hover, a:visited {
+                color: @links;
+                text-decoration: none;
+
+                &:hover {
+                    color: black;
+                }
+            }
+
+            &.open {
+                background-color: @gray4;
+
+                div.title {
+                    span.caret {
+                        margin-top: 5px;
+                        border-bottom: 5px solid transparent;
+                        border-top: 5px solid @white;
+                    }
+                }
+            }
+
+            div.title {
+                font-family: 'Droid Serif';
+                font-style: italic;
+                font-size: 16px;
+                color: white;
+                padding: 15px;
+
+                span.caret {
+                    .opacity(100);
+                    border-bottom: 5px solid @white;
+                    border-top: 5px solid transparent;
+                    border-left: 5px solid transparent;
+                    border-right: 5px solid transparent;
+                }
+            }
+
+            .section-content {
+                background-color: @gray1;
+                display: none;
+                padding: 25px;
+                color: @gray5;
+
+                p {
+                    margin-bottom: 0px;
+                }
+
+                p.our-number {
+                    margin-bottom: 25px;
+                }
+
+                .twitter {
+                    font-family: 'Droid Serif';
+                    font-style: italic;
+                    font-size: 14px;
+                    line-height: 34px;
+                }
+
+                input[type="text"] {
+                    font-size: 18px;
+                    line-height: 1em;
+                    width: 255px;
+                    height: 30px;
+
+                    &:focus {
+                        .box-shadow(none);
+                        border: 1px solid #cccccc;
+                        border-color: none;
+                    }
+                }
+
+                label.checkbox {
+                    color: @gray4;
+                }
+
+                .btn, button {
+                    font-family: nimbussannov-med;
+                    font-size: 15px;
+                    border: 3px solid @buttonColor;
+                    background-color: @buttonBackgroundColor;
+                    color: @buttonColor;
+                    text-align: center;
+                    padding: 5px 12px;
+                    line-height: 1em;
+                    vertical-align: middle;
+                    box-sizing: initial;
+
+                    &:visited {
+                        color: @buttonColor;
+                    }
+
+                    &:hover {
+                        background-color: @buttonColor;
+                        color: @buttonBackgroundColor;
+                        text-decoration: none;
+                    }
+
+                    &:disabled {
+                        background-color: #dddddd;
+                        color: #aaaaaa;
+                        border: 3px solid #cccccc;
+                        cursor: default;
+                    }
+                }
+
+                .result {
+                    font-size: 13px;
+                    padding: 10px 5px 10px 5px;
+                    margin-top: 15px;
+                    display: none;
+
+                    &.subscribed {
+                        background-color: #dff0d8;
+                        border: 1px solid #d6e9c6;
+                        color: #468847;
+
+                        .icon-ok-sign {
+                            color: #468847;
+                        }
+                    }
+
+                    &.error {
+                        background-color: #f2dede;
+                        border: 1px solid #eed3d7;
+                        color: #b94a48;
+
+                        .icon-ok-sign {
+                            color: #b94a48;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}

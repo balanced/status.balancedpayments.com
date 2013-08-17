@@ -1,6 +1,3 @@
-from __future__ import unicode_literals
-
-
 # Notice:
 # Following Twitter API keys are for testing or development only
 # (not the ones of real balanced status twitter account)
@@ -8,11 +5,11 @@ from __future__ import unicode_literals
 # generate these for your app at https://dev.twitter.com/apps/new
 TWITTER = {
     'AUTH': {
-        'consumer_key': 'rym1JOQ7Z8s6uRLAMDBQQ',
-        'consumer_secret': 'NRtIvPoW9c5rJQAnEpJ3WIUWGZGxGZlcUP0eeCbX5s',
-        'token': '584021415-rw1qpbslAtP7gDM6M8V0FaYnozDdlnH5XQakQetZ',
-        'token_secret': '7kUDLx4VcXecqZsfVGmbTcqd7kd5fSNNyJFxvrlszGg',
-    },
+        'consumer_key': 'XXXX',
+        'consumer_secret': 'XXXX',
+        'token': 'XXXX',
+        'token_secret': 'XXXX',
+     }
 }
 
 
@@ -21,48 +18,59 @@ TWITTER = {
 # requests.
 UPTIME = {
     'root_uri': 'http://graphite.balancedpayments.com/render/?',
-    'username': 'USERNAME',
-    'password': 'PASSWORD',
+    'username': 'username',
+    'password': 'password',
     'services': {
         'DASH': {
             'OK_TARGETS': [
                 'stats_counts.status.dashboard.2xx',
                 'stats_counts.status.dashboard.3xx',
                 'stats_counts.status.dashboard.4xx',
-            ],
+                ],
             'ERROR_TARGETS': [
                 'stats_counts.status.dashboard.5xx',
                 'stats_counts.status.dashboard.timeout',
-            ]
+                ]
         },
         'JS': {
             'OK_TARGETS': [
                 'stats_counts.status.balanced-js.2xx',
                 'stats_counts.status.balanced-js.3xx',
                 'stats_counts.status.balanced-js.4xx',
-            ],
+                ],
             'ERROR_TARGETS': [
                 'stats_counts.status.balanced-js.5xx',
                 'stats_counts.status.balanced-js.timeout',
-            ]
+                ]
         },
         'API': {
             'OK_TARGETS': [
                 'stats_counts.status.balanced-api.2xx',
                 'stats_counts.status.balanced-api.3xx',
                 'stats_counts.status.balanced-api.4xx',
-            ],
+                ],
             'ERROR_TARGETS': [
                 'stats_counts.status.balanced-api.5xx',
                 'stats_counts.status.balanced-api.timeout',
-            ]
+                ]
         },
     }
+}
+
+# The e-mail address to send notifications from
+EMAIL = {
+    'sender': 'Balanced Status <noreply@balancedpayments.com>'
+}
+
+# Provide TWILIO API credentials
+TWILIO = {
+    'account_sid': 'XXXX',
+    'auth_token': 'XXXX',
+    'from_number': 'XXXX'
 }
 
 
 # We're using a basic username and password to keep the boogie man out
 HTTP_AUTH = ('username', 'password')
-
 
 DEBUG = True
