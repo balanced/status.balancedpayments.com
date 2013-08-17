@@ -9,7 +9,8 @@ The status page consists of several sections:
   requests over the last 30 days
 * The middle portion displays informational messages
 * The lower portion displays issues with behavior
-* The top left hand corner allows users to subscribe to notifications on service UP and DOWN via SMS
+* The top left hand corner allows users to subscribe to notifications on service
+UP and DOWN via EMAIL and SMS
 
 ## Message Display Behavior
 
@@ -45,7 +46,3 @@ state, if the number of successful requests in the same period drops below
 ## Testing
 
     python tests/__init__.py /usr/local/google_appengine/ tests
-
-## Deploying
-
-    appcfg.py update balancedstatus2

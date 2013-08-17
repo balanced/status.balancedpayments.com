@@ -37,7 +37,7 @@ class TestSubscription(unittest.TestCase):
 
     def _assert_expectations(self, tests):
         for index, (service, status, expected) in enumerate(tests, start=1):
-            result = subscription.should_notify(service, status)
+            result = subscription.should_notify(service, status, None)
             self.assertEqual(result, expected,
                              'Assertion failed for case# {}'.format(index))
 

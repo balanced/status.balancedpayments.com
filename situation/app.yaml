@@ -17,6 +17,18 @@ handlers:
   script: main.app
   secure: always
 
+- url: /twitter?_method=post
+  script: main.app
+  secure: always
+  login: admin
+  auth_fail_action: unauthorized
+
+- url: /uptime?_method=post
+  script: main.app
+  secure: always
+  login: admin
+  auth_fail_action: unauthorized
+
 libraries:
 - name: webapp2
   version: "2.5.1"

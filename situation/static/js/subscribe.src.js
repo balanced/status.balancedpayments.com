@@ -34,6 +34,10 @@ function disableFields(section) {
     $(section).find("input, button").prop("disabled", true);
 }
 
+function enableFields(section) {
+    $(section).find("input, button").prop("disabled", false);
+}
+
 function sanitizePhone(phone) {
     return phone.replace(/ /g, "").replace(/-/g, "").replace(/\(/g, "").replace(/\)/g, "");
 }
@@ -77,7 +81,7 @@ $(document).ready(function() {
         if(!isEmpty(p) && hasChecked(services)) {
             disableFields($("#sms"));
 
-            $.ajax("/subscribe/sms", {
+            $.ajax("/subscriptions/sms", {
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -91,6 +95,7 @@ $(document).ready(function() {
                     if(result.status !== 200) {
                         var responseObject = JSON.parse(result.responseText);
 
+                        enableFields($("#sms"));
                         $("#sms .section-content .result.error span").html(responseObject.error);
                         $("#sms .section-content .result.error").show();
                     }
@@ -110,7 +115,7 @@ $(document).ready(function() {
         if(!isEmpty(e) && hasChecked(services)) {
             disableFields($("#email"));
 
-            $.ajax("/subscribe/email", {
+            $.ajax("/subscriptions/email", {
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -119,6 +124,15 @@ $(document).ready(function() {
                 },
                 success: function(result) {
                     $("#email .section-content .result.subscribed").show();
+                },
+                complete: function(result) {
+                    if(result.status !== 200) {
+                        var responseObject = JSON.parse(result.responseText);
+
+                        enableFields($("#email"));
+                        $("#email .section-content .result.error span").html(responseObject.error);
+                        $("#email .section-content .result.error").show();
+                    }
                 }
             });
         }

@@ -35,6 +35,7 @@ import settings
 import tweeter
 import uptime
 import models
+import mailer
 import sms
 import subscription
 
@@ -234,7 +235,7 @@ class UptimeHandler(TwitterBaseController):
             if service == "DASH":
                 service = "DASHBOARD"
 
-            subscription.should_notify(service, _s['status'])
+            subscription.should_notify(service, _s['status'], self.request.url)
 
         return encoding.to_json(raw)
 
@@ -263,7 +264,7 @@ class MainHandler(webapp2.RequestHandler):
 class SubscribeEmailHandler(webapp2.RequestHandler):
 
     def post(self):
-        self.response.headers['Content-Tyspe'] = 'application/json'
+        self.response.headers['Content-Type'] = 'application/json'
 
         email = self.request.get('email')
         services = self.request.get('services').rstrip(',')
@@ -281,6 +282,12 @@ class SubscribeEmailHandler(webapp2.RequestHandler):
             }))
             return
 
+        mail = mailer.Mail()
+        mail.send(email,
+            "Successfully subscribed to Balanced " + services + " incidents",
+            "You successfully subscribed to Balanced " + services + " incidents.",
+            self.request.url)
+
         s = models.EmailSubscriber(email=email,
                                    services=services.split(','))
 
@@ -297,9 +304,7 @@ class SubscribeSMSHandler(webapp2.RequestHandler):
     def post(self):
         self.response.headers['Content-Type'] = 'application/json'
 
-        phone = self.request.get('phone').replace(' ', '').replace(
-            '-', '').replace('(', '').replace(')', '')
-
+        phone = self.request.get('phone')
         services = self.request.get('services').rstrip(',')
 
         query = db.GqlQuery(
@@ -323,6 +328,7 @@ class SubscribeSMSHandler(webapp2.RequestHandler):
                      " incidents. Reply with STOP to unsubscribe.")
 
         except TwilioException, e:
+            LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
             self.response.status = 400
             self.response.out.write(json.dumps({
                 "error": e.msg
@@ -339,6 +345,24 @@ class SubscribeSMSHandler(webapp2.RequestHandler):
             "services": services.split(',')
         }))
 
+class UnsubscribeEmailHandler(webapp2.RequestHandler):
+
+    def get(self, base64email):
+        if not base64email:
+            self.redirect("/")
+
+        email = base64.urlsafe_b64decode(base64email)
+
+        if email:
+            email_subscriber = models.EmailSubscriber.all()
+            email_subscriber.filter('email =', email)
+
+            for es in email_subscriber:
+                es.delete()
+
+        # ToDo: show a nice pretty notification that e-mail is subscribed
+        self.redirect("/")
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
@@ -347,6 +371,7 @@ app = webapp2.WSGIApplication([
     ('/twitter/messages', TwitterMessageHandler),
     ('/twitter/messages/latest', TwitterLatestMessageHandler),
     ('/twitter/(.*)', TwitterHandler),
-    ('/subscribe/email', SubscribeEmailHandler),
-    ('/subscribe/sms', SubscribeSMSHandler)
+    ('/subscriptions/email', SubscribeEmailHandler),
+    ('/subscriptions/email/(.*)', UnsubscribeEmailHandler),
+    ('/subscriptions/sms', SubscribeSMSHandler)
 ], debug=settings.DEBUG)

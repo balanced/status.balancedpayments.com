@@ -57,6 +57,11 @@ UPTIME = {
     }
 }
 
+# The e-mail address to send notifications from
+EMAIL = {
+    'sender': 'Balanced Status <noreply@balancedpayments.com>'
+}
+
 # Provide TWILIO API credentials
 TWILIO = {
     'account_sid': 'XXXX',
