@@ -21,19 +21,6 @@ class AuthHandler(object):
         raise NotImplementedError
 
 
-class BasicAuthHandler(AuthHandler):
-
-    def __init__(self, username, password):
-        self.username = username
-        self._b64up = base64.b64encode('%s:%s' % (username, password))
-
-    def apply_auth(self, url, method, headers, parameters):
-        headers['Authorization'] = 'Basic %s' % self._b64up
-
-    def get_username(self):
-        return self.username
-
-
 class OAuthHandler(AuthHandler):
     """OAuth authentication handler"""
 
@@ -138,9 +125,9 @@ class OAuthHandler(AuthHandler):
                 oauth_consumer=self._consumer,
                 http_method='POST', http_url=url,
                 parameters = {
-		            'x_auth_mode': 'client_auth',
-		            'x_auth_username': username,
-		            'x_auth_password': password
+                    'x_auth_mode': 'client_auth',
+                    'x_auth_username': username,
+                    'x_auth_password': password
                 }
             )
             request.sign_request(self._sigmethod, self._consumer, None)

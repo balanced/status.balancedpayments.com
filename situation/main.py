@@ -59,34 +59,7 @@ def cache(method, seconds=60 * 60 * 24):
     return wrapped
 
 
-def require_basic_auth(method):
-    """ Authenticates using HTTP Basic Authorization.  """
-    @functools.wraps(method)
-    def http_basic_auth(self, *args):
-        def fail_basic_auth():
-            self.error(401)
-            self.response.headers['WWW-Authenticate'] = (
-                'Basic realm="status.balancedpayments.com"')
-
-        basic_auth = self.request.headers.get('Authorization')
-        if not basic_auth:
-            LOGGER.debug("Request does not carry auth.")
-            return fail_basic_auth()
-        try:
-            user_info = base64.decodestring(basic_auth[6:])
-            username, password = user_info.split(':')
-        except Exception as ex:
-            LOGGER.exception(ex)
-            return fail_basic_auth()
-        else:
-            if (username, password) != settings.HTTP_AUTH:
-                return fail_basic_auth()
-        self.auth = (username, password)
-        return method(self, *args)
-    return http_basic_auth
-
-
-class TwitterBaseController(webapp2.RedirectHandler):
+class TwitterBaseController(webapp2.RequestHandler):
 
     def __init__(self, *a, **kw):
         super(TwitterBaseController, self).__init__(*a, **kw)
@@ -99,12 +72,7 @@ class TwitterHandler(TwitterBaseController):
 
     def get(self, service=None, **_):
         self.response.headers['Content-Type'] = 'application/json'
-
-        # Required for Google App engine cron, since they don't support POST
-        if self.request.get('_method') and self.request.get('_method') == 'post':
-            self.post()
-        else:
-            self.response.out.write(self._get(service))
+        self.response.out.write(self._get(service))
 
     @cache
     def _get(self, service):
@@ -112,20 +80,50 @@ class TwitterHandler(TwitterBaseController):
         services = [service] if service else tweeter.SERVICES
         for service in services:
             tweets += self.tweet_manager.get(service)
+
         return encoding.to_json({
             'messages': [encoding.to_dict(m) for m in tweets]
         })
 
     def post(self):
         self.tweet_manager.run()
+
         keys = [
             self.request.path.replace('/', ''),
             'twittermessages',
             'twittermessageslatest',
         ]
-        memcache.delete_multi(keys)
+
+        for key in keys:
+            memcache.delete(key)
+
+        # Send notifications on tweet
+        for service in tweeter.SERVICES:
+            latest_tweet = self.tweet_manager.get_last_message(service)
+
+            # Notified must be set, False, and created within the last 10
+            # minutes
+            if (latest_tweet and hasattr(latest_tweet, 'notified') and
+               not latest_tweet.notified
+               and latest_tweet.created_at > datetime.utcnow() - timedelta(minutes=10)):
+
+                self.tweet_manager._set_notified(latest_tweet.tweet_id)
+
+                subscription.send_emails(service=service,
+                                         request_url=self.request.url,
+                                         twitter_tweet=latest_tweet.message)
+
+                subscription.send_smses(service=service,
+                                        twitter_tweet=latest_tweet.message)
 
         self.get()
+
+
+class TwitterPostHandler(webapp2.RequestHandler):
+
+    def get(self):
+        th = TwitterHandler(self.request, self.response)
+        th.post()
 
 
 class TwitterMessageHandler(TwitterBaseController):
@@ -200,18 +198,13 @@ class UptimeHandler(TwitterBaseController):
     POST deletes cached results, the subsequent GET will re-populate the cache
     """
 
-    def __init__(self, request, method):
-        super(UptimeHandler, self).__init__(request, method)
+    def __init__(self, request, response):
+        super(UptimeHandler, self).__init__(request, response)
         self.uptime_manager = uptime.Calculator(**settings.UPTIME)
 
     def get(self, *a, **kw):
         self.response.headers['Content-Type'] = 'application/json'
-
-        # Required for Google App engine cron, since they don't support POST
-        if self.request.get('_method') and self.request.get('_method') == 'post':
-            self.post()
-        else:
-            self.response.out.write(self._get())
+        self.response.out.write(self._get())
 
     @cache
     def _get(self):
@@ -220,6 +213,7 @@ class UptimeHandler(TwitterBaseController):
                             for k, v in
                             self.uptime_manager.refresh()])
         }
+
         for service in tweeter.SERVICES:
             # if a service is UP and a tweet says it's down, then the down
             # takes precedence
@@ -229,11 +223,8 @@ class UptimeHandler(TwitterBaseController):
                 tweet_state = self.tweet_manager.get_latest_state(
                     service
                 )
-                _s['status'] = tweet_state or _s['status']
 
-            # This is filthy. Don't judge me bro
-            if service == "DASH":
-                service = "DASHBOARD"
+                _s['status'] = tweet_state or _s['status']
 
             subscription.should_notify(service, _s['status'], self.request.url)
 
@@ -242,9 +233,14 @@ class UptimeHandler(TwitterBaseController):
     def post(self):
         key = self.request.path.replace('/', '')
         memcache.delete(key)
+        self.get()
 
-        self.response.headers['Content-Type'] = 'application/json'
-        self.response.out.write(self._get())
+
+class UptimePostHandler(webapp2.RequestHandler):
+
+    def get(self):
+        uh = UptimeHandler(self.request, self.response)
+        uh.post()
 
 
 class MainHandler(webapp2.RequestHandler):
@@ -284,9 +280,11 @@ class SubscribeEmailHandler(webapp2.RequestHandler):
 
         mail = mailer.Mail()
         mail.send(email,
-            "Successfully subscribed to Balanced " + services + " incidents",
-            "You successfully subscribed to Balanced " + services + " incidents.",
-            self.request.url)
+                  "Successfully subscribed to Balanced " +
+                  services + " incidents",
+                  "You successfully subscribed to Balanced " +
+                  services + " incidents.",
+                  self.request.url)
 
         s = models.EmailSubscriber(email=email,
                                    services=services.split(','))
@@ -345,6 +343,7 @@ class SubscribeSMSHandler(webapp2.RequestHandler):
             "services": services.split(',')
         }))
 
+
 class UnsubscribeEmailHandler(webapp2.RequestHandler):
 
     def get(self, base64email):
@@ -367,7 +366,9 @@ class UnsubscribeEmailHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/uptime', UptimeHandler),
+    ('/uptime/post', UptimePostHandler),
     ('/twitter', TwitterHandler),
+    ('/twitter/post', TwitterPostHandler),
     ('/twitter/messages', TwitterMessageHandler),
     ('/twitter/messages/latest', TwitterLatestMessageHandler),
     ('/twitter/(.*)', TwitterHandler),

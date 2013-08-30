@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.abspath('./'))
 from situation import subscription, models
 from google.appengine.ext import testbed
 
+
 class TestSubscription(unittest.TestCase):
 
     def setUp(self):
@@ -25,7 +26,8 @@ class TestSubscription(unittest.TestCase):
         default_api.put()
 
         # Create default DASHBOARD ServiceStatus
-        default_dashboard = models.ServiceStatus(service='DASHBOARD', current='UP')
+        default_dashboard = models.ServiceStatus(service='DASHBOARD',
+                                                 current='UP')
         default_dashboard.put()
 
         # Create default JS ServiceStatus

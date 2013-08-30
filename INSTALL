@@ -1,4 +1,3 @@
-
 Before you begin, make sure you've got [Google App Engine SDK](https://developers.google.com/appengine/downloads) installed.
 
 You'll need a Twitter account, with development API keys, and a Twilio account for sending SMS notifications.
@@ -16,14 +15,8 @@ You'll need a Twitter account, with development API keys, and a Twilio account f
 
 4. Visit [http://localhost:8000/](http://localhost:8000/) to view the page
 
-5. To pull data from our test Twitter account, run this curl command
-
-        curl http://localhost:8000/twitter -d "" -u username:password
-
-6. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml#L1), change the name of the app (`situation-staging`) to your own app name and then run
+5. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml#L1), change the name of the app (`situation-staging`) to your own app name and then run
 
         appcfg.py update situation/
 
 If you want to use this for your own, you'll need to point it at your own graphite server and add your own Twitter app credentials into [settings.py](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/settings.py#L6).
-
-Finally, you'll need to setup a cron job or some other sort of scheduled task which will `POST` to the `/twitter` and `/uptime` URLs to pull metrics into the system.

@@ -8,10 +8,15 @@ class Tweet(db.Model):
     status = db.StringProperty()
     service = db.StringProperty()
     tweet_id = db.StringProperty()
+    notified = db.BooleanProperty()
 
     @db.ComputedProperty
     def created_date(self):
         return self.created_at.date().strftime('%Y-%m-%d')
+
+    def setNotified(self):
+        self.notified = True
+        self.put()
 
 
 class Uptime(db.Model):
