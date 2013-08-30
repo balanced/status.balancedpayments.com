@@ -20,7 +20,7 @@ def main(sdk_path, test_path):
     suite = unittest.loader.TestLoader().discover(test_path)
 
     # Uncomment to get logging during tests
-    #logging.getLogger().setLevel(logging.DEBUG)
+    # logging.getLogger().setLevel(logging.DEBUG)
 
     unittest.TextTestRunner(verbosity=2).run(suite)
 

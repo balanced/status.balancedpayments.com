@@ -5,7 +5,7 @@ import unittest
 sys.path.insert(0, os.path.abspath('./situation'))
 sys.path.insert(0, os.path.abspath('./'))
 
-from situation import settings, tweeter, tweepy
+from situation import settings, tweeter
 from tweepy import TweepError
 from google.appengine.ext import testbed
 
@@ -35,4 +35,4 @@ class TestTwitter(unittest.TestCase):
         except TweepError, e:
             pass
 
-        self.assertGreater(len(tweets), 0, "Failed to fetch timeline tweets from twitter.")
+        self.assertGreater(len(tweets), 0, 'Failed to fetch timeline tweets from twitter')

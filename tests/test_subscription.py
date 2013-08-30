@@ -5,9 +5,10 @@ import unittest
 sys.path.insert(0, os.path.abspath('./situation'))
 sys.path.insert(0, os.path.abspath('./'))
 
-from situation import subscription, models
+from situation import main, subscription, models
+from google.appengine.api import mail
 from google.appengine.ext import testbed
-
+import webapp2
 
 class TestSubscription(unittest.TestCase):
 
@@ -20,6 +21,7 @@ class TestSubscription(unittest.TestCase):
         self.testbed.init_datastore_v3_stub()
         self.testbed.init_memcache_stub()
         self.testbed.init_logservice_stub()
+        self.testbed.init_mail_stub()
 
         # Create default API ServiceStatus
         default_api = models.ServiceStatus(service='API', current='UP')
@@ -105,3 +107,25 @@ class TestSubscription(unittest.TestCase):
         ]
 
         self._assert_expectations(tests)
+
+
+    def test_subscribe_email(self):
+        request = webapp2.Request.blank(path='/subscriptions/email', POST={
+            'email': 'foo@bar.com',
+            'services': 'API,DASH,JS'
+        })
+
+        response = request.get_response(main.app)
+        self.assertEqual(response.status_int, 200, 'Failed to get back a 200 status code from POST /subscriptions/email')
+        self.assertEqual(response.body, '{"services": ["API", "DASH", "JS"], "subscribed": "email"}')
+
+    def test_subscribe_sms(self):
+        # +15005550000 is a special testing Twilio number that passes their checks
+        request = webapp2.Request.blank(path='/subscriptions/sms', POST={
+            'phone': '+15005550000',
+            'services': 'API,DASH,JS'
+        })
+
+        response = request.get_response(main.app)
+        self.assertEqual(response.status_int, 200, 'Failed to get back a 200 status code from POST /subscriptions/sms')
+        self.assertEqual(response.body, '{"services": ["API", "DASH", "JS"], "subscribed": "sms"}')
