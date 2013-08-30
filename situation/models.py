@@ -14,7 +14,7 @@ class Tweet(db.Model):
     def created_date(self):
         return self.created_at.date().strftime('%Y-%m-%d')
 
-    def setNotified(self):
+    def set_notified(self):
         self.notified = True
         self.put()
 

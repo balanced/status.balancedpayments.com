@@ -65,7 +65,7 @@ class TwitterStatusProcessor(object):
 
         for tweet in results:
             if tweet:
-                tweet.setNotified()
+                tweet.set_notified()
 
     def _get_last_updated(self, service=None):
         key = self._get_tw_key(service)

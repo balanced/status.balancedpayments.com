@@ -23,7 +23,7 @@ Messages take the format
 * `DASH-UP: Everything is normal`
 * `API-ISSUE: We are experiencing network latency`
 * `API-DOWN: Database disks caught fire`
-* `JS: Read our postmodern at: http://goo.gl/hV7gVh` Tweeets send out to subscribers via either EMAIL or SMS
+* `JS: Read our postmortem at: http://goo.gl/hV7gVh` Tweeets send out to subscribers via either EMAIL or SMS
 
 SYSTEM is one of `API`, `JS`, `DASH`
 STATE (OPTIONAL) is one of `UP`, `DOWN`, `ISSUE`
