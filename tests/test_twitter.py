@@ -35,4 +35,4 @@ class TestTwitter(unittest.TestCase):
         except TweepError, e:
             pass
 
-        self.assertGreater(len(tweets), 0)
+        self.assertGreater(len(tweets), 0, "Failed to fetch timeline tweets from twitter.")
