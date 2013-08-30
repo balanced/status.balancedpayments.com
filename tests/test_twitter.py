@@ -25,7 +25,7 @@ class TestTwitter(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    # Asset that fetching timeline tweets from twitter does not throw an exception
+    # Assert that fetching timeline tweets from twitter does not throw an exception
     def test_get_tweets(self):
         t = tweeter.TwitterStatusProcessor(**settings.TWITTER['AUTH'])
 
