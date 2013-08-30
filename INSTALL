@@ -15,8 +15,8 @@ You'll need a Twitter account, with development API keys, and a Twilio account f
 
 4. Visit [http://localhost:8000/](http://localhost:8000/) to view the page
 
-5. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml#L1), change the name of the app (`situation-staging`) to your own app name and then run
+5. If you want to deploy this to your own GAE account, edit [`app.yaml`](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/app.yaml), change the name of the app (`situation-staging`) to your own app name and then run
 
         appcfg.py update situation/
 
-If you want to use this for your own, you'll need to point it at your own graphite server and add your own Twitter app credentials into [settings.py](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/settings.py#L6).
+If you want to use this for your own, you'll need to point it at your own graphite server and add your own Twitter and Twillio credentials into [settings.py](https://github.com/balanced/status.balancedpayments.com/blob/master/situation/settings.py).

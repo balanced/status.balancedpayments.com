@@ -26,7 +26,7 @@ Messages take the format
 * `JS: Read our postmodern at: http://goo.gl/hV7gVh` Tweeets send out to subscribers via either EMAIL or SMS
 
 SYSTEM is one of `API`, `JS`, `DASH`
-STATE is one of `UP`, `DOWN`, `ISSUE` (OPTIONAL)
+STATE (OPTIONAL) is one of `UP`, `DOWN`, `ISSUE`
 
 Messages with a state are displayed in the lower portion of the page
 indefinitely, `ISSUE` or `DOWN` messages will change the icon of the
