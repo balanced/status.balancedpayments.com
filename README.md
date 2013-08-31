@@ -20,11 +20,13 @@ Messages take the format
 
 `<SYSTEM>-<STATE>: <MESSAGE>`; e.g.
 
-* `DASH-UP: Everything is back to normal`
-* `API-ISSUE: We are experiencing problems`
-* `JS: Here's an informal message` _(non-error message)_
+* `DASH-UP: Everything is normal`
+* `API-ISSUE: We are experiencing network latency`
+* `API-DOWN: Database disks caught fire`
+* `JS: Read our postmortem at: http://goo.gl/hV7gVh` Tweeets send out to subscribers via either EMAIL or SMS
 
-Where STATE is one of `UP`, `DOWN`, `ISSUE`
+SYSTEM is one of `API`, `JS`, `DASH`
+STATE (OPTIONAL) is one of `UP`, `DOWN`, `ISSUE`
 
 Messages with a state are displayed in the lower portion of the page
 indefinitely, `ISSUE` or `DOWN` messages will change the icon of the
@@ -42,7 +44,6 @@ minutes drops below *99%* then the system will automatically go into an `ISSUE`
 state, if the number of successful requests in the same period drops below
 *90%* then the system will be in the `DOWN` state.
 
-
-## Testing
+## Tests
 
     python tests/__init__.py /usr/local/google_appengine/ tests

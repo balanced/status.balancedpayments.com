@@ -1,7 +1,7 @@
 cron:
 - description: twitter update
-  url: /twitter?_method=post
-  schedule: every 2 minutes
+  url: /twitter/post
+  schedule: every 1 minutes
 - description: uptime update
-  url: /uptime?_method=post
+  url: /uptime/post
   schedule: every 1 minutes

@@ -2,6 +2,7 @@
 # Copyright 2009-2010 Joshua Roesslein
 # See LICENSE for details.
 
+import logging
 import httplib
 from socket import timeout
 from threading import Thread
@@ -14,7 +15,7 @@ from tweepy.error import TweepError
 from tweepy.utils import import_simplejson, urlencode_noplus
 json = import_simplejson()
 
-STREAM_VERSION = 1
+STREAM_VERSION = '1.1'
 
 
 class StreamListener(object):
@@ -22,24 +23,39 @@ class StreamListener(object):
     def __init__(self, api=None):
         self.api = api or API()
 
-    def on_data(self, data):
+    def on_connect(self):
+        """Called once connected to streaming server.
+
+        This will be invoked once a successful response
+        is received from the server. Allows the listener
+        to perform some work prior to entering the read loop.
+        """
+        pass
+
+    def on_data(self, raw_data):
         """Called when raw data is received from connection.
 
         Override this method if you wish to manually handle
         the stream data. Return False to stop stream and close connection.
         """
+        data = json.loads(raw_data)
 
         if 'in_reply_to_status_id' in data:
-            status = Status.parse(self.api, json.loads(data))
+            status = Status.parse(self.api, data)
             if self.on_status(status) is False:
                 return False
         elif 'delete' in data:
-            delete = json.loads(data)['delete']['status']
+            delete = data['delete']['status']
             if self.on_delete(delete['id'], delete['user_id']) is False:
                 return False
         elif 'limit' in data:
-            if self.on_limit(json.loads(data)['limit']['track']) is False:
+            if self.on_limit(data['limit']['track']) is False:
                 return False
+        elif 'disconnect' in data:
+            if self.on_disconnect(data['disconnect']) is False:
+                return False
+        else:
+            logging.error("Unknown message type: " + str(raw_data))
 
     def on_status(self, status):
         """Called when a new status arrives"""
@@ -59,6 +75,14 @@ class StreamListener(object):
 
     def on_timeout(self):
         """Called when stream connection times out"""
+        return
+
+    def on_disconnect(self, notice):
+        """Called when twitter sends a disconnect notice
+
+        Disconnect codes are listed here:
+        https://dev.twitter.com/docs/streaming-apis/messages#Disconnect_messages_disconnect
+        """
         return
 
 
@@ -99,12 +123,11 @@ class Stream(object):
                 break
             try:
                 if self.scheme == "http":
-                    conn = httplib.HTTPConnection(self.host)
+                    conn = httplib.HTTPConnection(self.host, timeout=self.timeout)
                 else:
-                    conn = httplib.HTTPSConnection(self.host)
+                    conn = httplib.HTTPSConnection(self.host, timeout=self.timeout)
                 self.auth.apply_auth(url, 'POST', self.headers, self.parameters)
                 conn.connect()
-                conn.sock.settimeout(self.timeout)
                 conn.request('POST', self.url, self.body, headers=self.headers)
                 resp = conn.getresponse()
                 if resp.status != 200:
@@ -114,6 +137,7 @@ class Stream(object):
                     sleep(self.retry_time)
                 else:
                     error_counter = 0
+                    self.listener.on_connect()
                     self._read_loop(resp)
             except timeout:
                 if self.listener.on_timeout() == False:
@@ -135,9 +159,8 @@ class Stream(object):
             raise
 
     def _data(self, data):
-        for d in [dt for dt in data.split('\n') if dt]:
-            if self.listener.on_data(d) is False:
-                self.running = False
+        if self.listener.on_data(data) is False:
+            self.running = False
 
     def _read_loop(self, resp):
 
@@ -187,7 +210,7 @@ class Stream(object):
         self.parameters = {'delimited': 'length'}
         if self.running:
             raise TweepError('Stream object already connected!')
-        self.url = '/%i/statuses/firehose.json?delimited=length' % STREAM_VERSION
+        self.url = '/%s/statuses/firehose.json?delimited=length' % STREAM_VERSION
         if count:
             self.url += '&count=%s' % count
         self._start(async)
@@ -196,24 +219,25 @@ class Stream(object):
         self.parameters = {'delimited': 'length'}
         if self.running:
             raise TweepError('Stream object already connected!')
-        self.url = '/%i/statuses/retweet.json?delimited=length' % STREAM_VERSION
+        self.url = '/%s/statuses/retweet.json?delimited=length' % STREAM_VERSION
         self._start(async)
 
     def sample(self, count=None, async=False):
         self.parameters = {'delimited': 'length'}
         if self.running:
             raise TweepError('Stream object already connected!')
-        self.url = '/%i/statuses/sample.json?delimited=length' % STREAM_VERSION
+        self.url = '/%s/statuses/sample.json?delimited=length' % STREAM_VERSION
         if count:
             self.url += '&count=%s' % count
         self._start(async)
 
-    def filter(self, follow=None, track=None, async=False, locations=None, count = None):
+    def filter(self, follow=None, track=None, async=False, locations=None, 
+        count = None, stall_warnings=False, languages=None):
         self.parameters = {}
         self.headers['Content-type'] = "application/x-www-form-urlencoded"
         if self.running:
             raise TweepError('Stream object already connected!')
-        self.url = '/%i/statuses/filter.json?delimited=length' % STREAM_VERSION
+        self.url = '/%s/statuses/filter.json?delimited=length' % STREAM_VERSION
         if follow:
             self.parameters['follow'] = ','.join(map(str, follow))
         if track:
@@ -223,6 +247,10 @@ class Stream(object):
             self.parameters['locations'] = ','.join(['%.2f' % l for l in locations])
         if count:
             self.parameters['count'] = count
+        if stall_warnings:
+            self.parameters['stall_warnings'] = stall_warnings
+        if languages:
+            self.parameters['language'] = ','.join(map(str, languages))
         self.body = urlencode_noplus(self.parameters)
         self.parameters['delimited'] = 'length'
         self._start(async)

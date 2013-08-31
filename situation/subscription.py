@@ -8,6 +8,10 @@ from twilio.rest import TwilioException
 LOGGER = logging.getLogger(__name__)
 
 def should_notify(service, current_state, request_url):
+     # This is filthy. Don't judge me bro
+    if service == "DASH":
+        service = "DASHBOARD"
+
     svc_status = models.ServiceStatus.all()
     svc_status.filter('service =', service)
 
@@ -25,14 +29,18 @@ def should_notify(service, current_state, request_url):
             if settings.DEBUG:
                 LOGGER.info("SERVICE [" + service + "] IS " + current_state)
 
-            send_emails(service, current_state, request_url)
+            send_emails(service, request_url, current_state)
             send_smses(service, current_state)
             return True
 
     return False
 
 
-def send_emails(service, current_state, request_url):
+def send_emails(service, request_url, current_state=None, twitter_tweet=None):
+    # This is filthy. Don't judge me bro
+    if service == "DASH":
+        service = "DASHBOARD"
+
     email_subscribers = models.EmailSubscriber.gql("WHERE services IN (:1)", service)
 
     if settings.DEBUG:
@@ -40,17 +48,33 @@ def send_emails(service, current_state, request_url):
             "SENDING NOTIFICATION TO [" + str(email_subscribers.count()) + "] EMAIL SUBSCRIBERS"
         )
 
-    mail = mailer.Mail()
-    for email_subscriber in email_subscribers:
-        mail.send(
-            email_subscriber.email,
-            "Balanced {} is {}".format(
-                service, current_state),
-            "Balanced {} is {}.".format(service, current_state) + "\n\n" +
-            "This is an automated notification from https://status.balancedpayments.com",
-            request_url)
+    if not settings.SAFE_MODE:
+        mail = mailer.Mail()
+        for email_subscriber in email_subscribers:
+            # Tweet
+            if(twitter_tweet):
+                mail.send(
+                    email_subscriber.email,
+                    "{} tweet via @balancedstatus".format(
+                        service),
+                    "{}".format(twitter_tweet) +
+                    "\n\nThis is an automated notification from https://status.balancedpayments.com",
+                    request_url)
+            # UP/DOWN
+            else:
+                mail.send(
+                    email_subscriber.email,
+                    "Balanced {} is {}".format(
+                        service, current_state),
+                    "Balanced {} is {}.".format(service, current_state) +
+                    "\n\nThis is an automated notification from https://status.balancedpayments.com",
+                    request_url)
 
-def send_smses(service, current_state):
+def send_smses(service, current_state=None, twitter_tweet=None):
+    # This is filthy. Don't judge me bro
+    if service == "DASH":
+        service = "DASHBOARD"
+
     sms_subscribers = models.SMSSubscriber.gql("WHERE services IN (:1)", service)
 
     if settings.DEBUG:
@@ -58,13 +82,22 @@ def send_smses(service, current_state):
             "SENDING NOTIFICATION TO [" + str(sms_subscribers.count()) + "] SMS SUBSCRIBERS"
         )
 
-    txt = sms.SMS()
-    for sms_subscriber in sms_subscribers:
-        try:
-            txt.send(
-                sms_subscriber.phone,
-                "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
-                    service, current_state))
-        except TwilioException, e:
-            LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
-            pass
+    if not settings.SAFE_MODE:
+        txt = sms.SMS()
+        for sms_subscriber in sms_subscribers:
+            try:
+                # Tweet
+                if(twitter_tweet):
+                    txt.send(
+                        sms_subscriber.phone,
+                        "{}: {}. Reply with STOP to unsubscribe.".format(
+                            service, twitter_tweet))
+                # UP/DOWN
+                else:
+                    txt.send(
+                    sms_subscriber.phone,
+                    "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
+                        service, current_state))
+            except TwilioException, e:
+                LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
+                pass

@@ -25,6 +25,7 @@ class TwitterStatusProcessor(object):
             self.auth = tweepy.OAuthHandler(auth['consumer_key'],
                                             auth['consumer_secret'])
             self.auth.set_access_token(auth['token'], auth['token_secret'])
+
             self.twitter = tweepy.API(
                 self.auth,
                 api_root='/1.1',
@@ -45,6 +46,7 @@ class TwitterStatusProcessor(object):
             return
 
         self._insert(service, created_at, message, state, tweet_id_str)
+
         self._set_last_updated(service, tweet_id)
 
     def _get_tw_key(self, service=None):
@@ -57,6 +59,14 @@ class TwitterStatusProcessor(object):
         kv = models.KV(k=key, value=str(tweet_id), key_name=key)
         kv.put()
 
+    def _set_notified(self, tweet_id):
+        results = models.Tweet.all()
+        results.filter('tweet_id =', tweet_id)
+
+        for tweet in results:
+            if tweet:
+                tweet.set_notified()
+
     def _get_last_updated(self, service=None):
         key = self._get_tw_key(service)
         return models.KV.get(key)
@@ -64,6 +74,7 @@ class TwitterStatusProcessor(object):
     def _insert(self, service, created_at, message, status, tweet_id):
         key = '{}-{}'.format(service, created_at)
         tw = models.Tweet.all().filter('key_name=', key).fetch(1)
+
         if not tw:
             tw = models.Tweet(
                 service=service,
@@ -72,13 +83,16 @@ class TwitterStatusProcessor(object):
                 status=status,
                 key_name=key,
                 tweet_id=tweet_id,
+                notified=False
             )
+
             tw.put()
 
     def _get_tweets(self, min_date):
         filters = {}
         if min_date:
             filters['since_id'] = min_date.value
+
         return self.twitter.user_timeline(**filters)
 
     def run(self):
@@ -128,6 +142,7 @@ class TwitterStatusProcessor(object):
         tweets = models.Tweet.all().filter(
             'service = ', service
         ).order('-created_at').fetch(1)
+
         try:
             return tweets[0]
         except IndexError:

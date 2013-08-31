@@ -1,5 +1,5 @@
 application: situation-staging
-version: 1
+version: 3
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -13,13 +13,13 @@ handlers:
 - url: /static
   static_dir: static
 
-- url: /twitter?_method=post
+- url: /twitter/post
   script: main.app
   secure: always
   login: admin
   auth_fail_action: unauthorized
 
-- url: /uptime?_method=post
+- url: /uptime/post
   script: main.app
   secure: always
   login: admin

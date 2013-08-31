@@ -40,6 +40,7 @@ indexes:
   - name: created_date
   - name: service
   - name: created_at
+  - name: notified
 
 - kind: Tweet
   properties:
@@ -69,4 +70,10 @@ indexes:
   - name: service
   - name: state
   - name: created_at
+    direction: desc
+
+- kind: Tweet
+  properties:
+  - name: service
+  - name: tweet_id
     direction: desc
