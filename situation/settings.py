@@ -68,3 +68,4 @@ TWILIO = {
 }
 
 DEBUG = True
+SAFE_MODE = False

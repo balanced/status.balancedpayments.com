@@ -48,26 +48,27 @@ def send_emails(service, request_url, current_state=None, twitter_tweet=None):
             "SENDING NOTIFICATION TO [" + str(email_subscribers.count()) + "] EMAIL SUBSCRIBERS"
         )
 
-    mail = mailer.Mail()
-    for email_subscriber in email_subscribers:
-        # Tweet
-        if(twitter_tweet):
-            mail.send(
-                email_subscriber.email,
-                "{} tweet via @balancedstatus".format(
-                    service),
-                "{}".format(twitter_tweet) +
-                "\n\nThis is an automated notification from https://status.balancedpayments.com",
-                request_url)
-        # UP/DOWN
-        else:
-            mail.send(
-                email_subscriber.email,
-                "Balanced {} is {}".format(
-                    service, current_state),
-                "Balanced {} is {}.".format(service, current_state) +
-                "\n\nThis is an automated notification from https://status.balancedpayments.com",
-                request_url)
+    if not settings.SAFE_MODE:
+        mail = mailer.Mail()
+        for email_subscriber in email_subscribers:
+            # Tweet
+            if(twitter_tweet):
+                mail.send(
+                    email_subscriber.email,
+                    "{} tweet via @balancedstatus".format(
+                        service),
+                    "{}".format(twitter_tweet) +
+                    "\n\nThis is an automated notification from https://status.balancedpayments.com",
+                    request_url)
+            # UP/DOWN
+            else:
+                mail.send(
+                    email_subscriber.email,
+                    "Balanced {} is {}".format(
+                        service, current_state),
+                    "Balanced {} is {}.".format(service, current_state) +
+                    "\n\nThis is an automated notification from https://status.balancedpayments.com",
+                    request_url)
 
 def send_smses(service, current_state=None, twitter_tweet=None):
     # This is filthy. Don't judge me bro
@@ -81,21 +82,22 @@ def send_smses(service, current_state=None, twitter_tweet=None):
             "SENDING NOTIFICATION TO [" + str(sms_subscribers.count()) + "] SMS SUBSCRIBERS"
         )
 
-    txt = sms.SMS()
-    for sms_subscriber in sms_subscribers:
-        try:
-            # Tweet
-            if(twitter_tweet):
-                txt.send(
+    if not settings.SAFE_MODE:
+        txt = sms.SMS()
+        for sms_subscriber in sms_subscribers:
+            try:
+                # Tweet
+                if(twitter_tweet):
+                    txt.send(
+                        sms_subscriber.phone,
+                        "{}: {}. Reply with STOP to unsubscribe.".format(
+                            service, twitter_tweet))
+                # UP/DOWN
+                else:
+                    txt.send(
                     sms_subscriber.phone,
-                    "{}: {}. Reply with STOP to unsubscribe.".format(
-                        service, twitter_tweet))
-            # UP/DOWN
-            else:
-                txt.send(
-                sms_subscriber.phone,
-                "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
-                    service, current_state))
-        except TwilioException, e:
-            LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
-            pass
+                    "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
+                        service, current_state))
+            except TwilioException, e:
+                LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
+                pass
