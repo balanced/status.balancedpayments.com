@@ -7,6 +7,7 @@ from twilio.rest import TwilioException
 
 LOGGER = logging.getLogger(__name__)
 
+
 def should_notify(service, current_state, request_url):
      # This is filthy. Don't judge me bro
     if service == "DASH":
@@ -53,10 +54,11 @@ def send_emails(service, request_url, current_state=None, twitter_tweet=None):
         for email_subscriber in email_subscribers:
             # Tweet
             if(twitter_tweet):
+                twitter_tweet = twitter_tweet.strip()
+
                 mail.send(
                     email_subscriber.email,
-                    "{} tweet via @balancedstatus".format(
-                        service),
+                    "Tweet from @balancedstatus",
                     "{}".format(twitter_tweet) +
                     "\n\nThis is an automated notification from https://status.balancedpayments.com",
                     request_url)
@@ -69,6 +71,7 @@ def send_emails(service, request_url, current_state=None, twitter_tweet=None):
                     "Balanced {} is {}.".format(service, current_state) +
                     "\n\nThis is an automated notification from https://status.balancedpayments.com",
                     request_url)
+
 
 def send_smses(service, current_state=None, twitter_tweet=None):
     # This is filthy. Don't judge me bro
@@ -88,15 +91,17 @@ def send_smses(service, current_state=None, twitter_tweet=None):
             try:
                 # Tweet
                 if(twitter_tweet):
+                    twitter_tweet = twitter_tweet.strip()
+
                     txt.send(
                         sms_subscriber.phone,
-                        "{}: {}. Reply with STOP to unsubscribe.".format(
+                        "@balancedstatus: {} - {}".format(
                             service, twitter_tweet))
                 # UP/DOWN
                 else:
                     txt.send(
-                    sms_subscriber.phone,
-                    "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
+                        sms_subscriber.phone,
+                        "Balanced {} is {}. Reply with STOP to unsubscribe.".format(
                         service, current_state))
             except TwilioException, e:
                 LOGGER.error("Failed to send SMS via Twilio - " + e.msg)
