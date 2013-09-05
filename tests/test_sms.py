@@ -32,7 +32,10 @@ class TestSMS(unittest.TestCase):
         try:
             twilio = sms.SMS()
             response = twilio.send('+15005550000',
-                        'This is a super duper long sms message that is over one hundred and sixty characters, but should be auto truncated by the SMS class before attempting to send via Twilio.');
+                        'This is a super duper long sms message that is over ' +
+                        'one hundred and sixty characters, but should be auto ' +
+                        'truncated by the SMS class before attempting to  ' +
+                        'send via Twilio.')
         except TwilioException, e:
             pass
 
