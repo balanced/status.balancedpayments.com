@@ -49,6 +49,11 @@ def cache(method, seconds=60 * 60 * 24):
         key = (handler.request.path.replace('/', '') +
                handler.request.query_string)
 
+        # This is absolutely required, to normalize memcached keys
+        # from /twitter/post and /uptime/post
+        if "post" in key:
+            key = key.replace("post", '')
+
         data = memcache.get(key)
         if not data:
             LOGGER.info('CACHE miss')
@@ -89,7 +94,7 @@ class TwitterHandler(TwitterBaseController):
         self.tweet_manager.run()
 
         keys = [
-            self.request.path.replace('/', ''),
+            'twitter',
             'twittermessages',
             'twittermessageslatest',
         ]
@@ -231,8 +236,7 @@ class UptimeHandler(TwitterBaseController):
         return encoding.to_json(raw)
 
     def post(self):
-        key = self.request.path.replace('/', '')
-        memcache.delete(key)
+        memcache.delete('uptime')
         self.get()
 
 

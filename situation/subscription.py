@@ -58,8 +58,7 @@ def send_emails(service, request_url, current_state=None, twitter_tweet=None):
 
                 mail.send(
                     email_subscriber.email,
-                    "{} tweet via @balancedstatus".format(
-                        service),
+                    "Tweet from @balancedstatus",
                     "{}".format(twitter_tweet) +
                     "\n\nThis is an automated notification from https://status.balancedpayments.com",
                     request_url)
@@ -96,7 +95,7 @@ def send_smses(service, current_state=None, twitter_tweet=None):
 
                     txt.send(
                         sms_subscriber.phone,
-                        "@balancedstatus: {} {}. Reply with STOP to unsubscribe.".format(
+                        "@balancedstatus: {} - {}".format(
                             service, twitter_tweet))
                 # UP/DOWN
                 else:

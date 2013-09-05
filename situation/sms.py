@@ -14,6 +14,9 @@ class SMS(object):
         phone_number = phone_number.replace(' ', '').replace(
             '-', '').replace('(', '').replace(')', '')
 
+        # Limit message to 160 characters, enforced by Twilio
+        message = message[:160]
+
         return self.client.sms.messages.create(to=phone_number,
                                                from_=settings.TWILIO[
                                                    'from_number'],
