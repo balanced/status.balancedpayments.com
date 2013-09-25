@@ -116,9 +116,11 @@ class TwitterHandler(TwitterBaseController):
 
                 subscription.send_emails(service=service,
                                          request_url=self.request.url,
+                                         current_state=latest_tweet.status,
                                          twitter_tweet=latest_tweet.message)
 
                 subscription.send_smses(service=service,
+                                        current_state=latest_tweet.status,
                                         twitter_tweet=latest_tweet.message)
 
         self.get()

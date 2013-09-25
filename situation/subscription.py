@@ -49,7 +49,7 @@ def send_emails(service, request_url, current_state=None, twitter_tweet=None):
             "SENDING NOTIFICATION TO [" + str(email_subscribers.count()) + "] EMAIL SUBSCRIBERS"
         )
 
-    if not settings.SAFE_MODE:
+    if service in settings.NOTIFY_SERVICES:
         mail = mailer.Mail()
         for email_subscriber in email_subscribers:
             # Tweet
@@ -85,7 +85,7 @@ def send_smses(service, current_state=None, twitter_tweet=None):
             "SENDING NOTIFICATION TO [" + str(sms_subscribers.count()) + "] SMS SUBSCRIBERS"
         )
 
-    if not settings.SAFE_MODE:
+    if service in settings.NOTIFY_SERVICES:
         txt = sms.SMS()
         for sms_subscriber in sms_subscribers:
             try:

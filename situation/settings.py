@@ -68,4 +68,6 @@ TWILIO = {
 }
 
 DEBUG = True
-SAFE_MODE = False
+
+# Currently DASHBOARD does not send out notifications
+NOTIFY_SERVICES = ['API', 'JS']
