@@ -38,6 +38,8 @@ import models
 import mailer
 import sms
 import subscription
+import librato_uptime
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -207,7 +209,10 @@ class UptimeHandler(TwitterBaseController):
 
     def __init__(self, request, response):
         super(UptimeHandler, self).__init__(request, response)
-        self.uptime_manager = uptime.Calculator(**settings.UPTIME)
+        self.uptime_managers = [
+            uptime.Calculator(**settings.UPTIME),
+            librato_uptime.Calculator(**settings.LIBRATO_UPTIME)
+        ]
 
     def get(self, *a, **kw):
         self.response.headers['Content-Type'] = 'application/json'
@@ -215,10 +220,11 @@ class UptimeHandler(TwitterBaseController):
 
     @cache
     def _get(self):
+        uptimes = []
+        for manager in self.uptime_managers:
+            uptimes.extend(manager.refresh())
         raw = {
-            'uptime': dict([(k, v)
-                            for k, v in
-                            self.uptime_manager.refresh()])
+            'uptime': dict(uptimes)
         }
 
         for service in tweeter.SERVICES:
