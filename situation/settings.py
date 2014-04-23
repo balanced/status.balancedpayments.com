@@ -60,6 +60,27 @@ EMAIL = {
     'sender': 'Balanced Status <noreply@balancedpayments.com>'
 }
 
+LIBRATO_UPTIME = {
+    'root_uri': 'https://metrics-api.librato.com/v1/metrics/',
+    'username': 'vendors@balancedpayments.com',
+    'password': '14d624cde57cfba7cfa76baf0284d94c33de7f289db5ee4172f20c117234afff',
+    'services': {
+        'API': {
+            'SOURCE': '*bapi-live*',
+            'OK_TARGETS': [
+                'AWS.ELB.HTTPCode_Backend_2XX',
+                'AWS.ELB.HTTPCode_Backend_3XX',
+                'AWS.ELB.HTTPCode_Backend_4XX',
+            ],
+            'ERROR_TARGETS': [
+                'AWS.ELB.HTTPCode_Backend_5XX',
+                # TODO: where is our timeout in aws cloudwatch?
+                #'stats_counts.status.balanced-api.timeout',
+            ]
+        },
+    }
+}
+
 # TWILIO API credentials
 TWILIO = {
     'account_sid': 'XXXX',
