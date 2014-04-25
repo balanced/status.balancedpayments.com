@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 import logging
 import urllib
 import urllib2
+import time
 
 import encoding
 
@@ -38,14 +39,23 @@ class Calculator(object):
         opener = urllib2.build_opener(authhandler)
         urllib2.install_opener(opener)
 
-    def _construct_uri(self, metrics, source, minutes_ago=5):
+    def _construct_url(
+        self,
+        metrics,
+        source,
+        start_time,
+        end_time,
+        resolution=60,
+    ):
         return '{}{}?{}'.format(
             self.root_uri,
             metrics,
             urllib.urlencode(dict(
                 source=source,
-                count=minutes_ago,
-                resolution=60,
+                start_time=int(start_time),
+                end_time=int(end_time),
+                resolution=resolution,
+                summarize_time=1,
             ))
         )
 
@@ -62,10 +72,37 @@ class Calculator(object):
 
         """
         count = 0
+        # we need the biggest window to move along time line for reducing
+        # requests to a reasonable number. Oterwise, there is 43,200 minutes
+        # in a month, if we are using 1 minutes resolution, librato's
+        # request limitation is 100 data points per request, so we need
+        # 43,200 / 100 which is 432 requests to get sum of all data points
+        # in a month. With 3600 seconds (60 minutes or 1 hour) resolution,
+        # we only need 43,200 / (60 * 100) = 7 requests. This still sucks,
+        # but at least it is not a thousand requests. Oh, by the way, by
+        # setting the resolution to an hour, it's not so accurate. Looks
+        # like some data points are dropped
+        resolution = 60
+        if minutes_ago > 3600 / 60:
+            resolution = 3600
+        end_time = int(time.time())
+        start_time = end_time - (minutes_ago * 60)
         for metrics in targets[key]:
-            url = self._construct_uri(metrics, targets['SOURCE'], minutes_ago)
-            response = encoding.json.loads(urllib2.urlopen(url).read())
-            count += self._calculate_data(response['measurements'])
+            while True:
+                url = self._construct_url(
+                    metrics,
+                    targets['SOURCE'],
+                    start_time=start_time,
+                    end_time=end_time,
+                    resolution=resolution,
+                )
+                logger.debug('Fetching %s', url)
+                response = encoding.json.loads(urllib2.urlopen(url).read())
+                count += self._calculate_data(response['measurements'])
+                if response.get('query', {}).get('next_time'):
+                    start_time = response['query']['next_time']
+                else:
+                    break
         return count
 
     def _for_service(self, targets, minutes_ago):
@@ -80,7 +117,7 @@ class Calculator(object):
 
         logger.info(
             'OK=%s, ERROR=%s, PERCENTAGE=%s',
-            ok_count, error_count, percentage,
+            ok_count, error_count, percentage * 100,
         )
 
         return percentage * 100
