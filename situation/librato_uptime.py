@@ -3,8 +3,7 @@ import logging
 import urllib
 import urllib2
 import time
-
-import encoding
+import json
 
 
 logger = logging.getLogger(__name__)
@@ -96,7 +95,7 @@ class Calculator(object):
                     resolution=resolution,
                 )
                 logger.debug('Fetching %s', url)
-                response = encoding.json.loads(self.opener.open(url).read())
+                response = json.loads(self.opener.open(url).read())
                 count += self._calculate_data(response['measurements'])
                 if response.get('query', {}).get('next_time'):
                     start_time = response['query']['next_time']

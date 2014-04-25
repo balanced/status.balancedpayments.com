@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import urllib2
-
-import encoding
+import json
 
 
 LOGGER = logging.getLogger(__name__)
@@ -60,8 +59,8 @@ class Calculator(object):
         ok_uri = self._construct_uri(targets['OK_TARGETS'], minutes_ago)
         error_uri = self._construct_uri(targets['ERROR_TARGETS'], minutes_ago)
 
-        ok_stats = encoding.json.loads(self.opener.open(ok_uri).read())
-        error_stats = encoding.json.loads(self.opener.open(error_uri).read())
+        ok_stats = json.loads(self.opener.open(ok_uri).read())
+        error_stats = json.loads(self.opener.open(error_uri).read())
 
         error_counts = self._calculate_data(error_stats)
         ok_counts = self._calculate_data(ok_stats)
