@@ -64,18 +64,16 @@ LIBRATO_UPTIME = {
     'root_uri': 'https://metrics-api.librato.com/v1/metrics/',
     'username': 'vendors@balancedpayments.com',
     'password': '14d624cde57cfba7cfa76baf0284d94c33de7f289db5ee4172f20c117234afff',
+    'password': 'FIXME',
     'services': {
         'API': {
             'SOURCE': '*bapi-live*',
-            'OK_TARGETS': [
-                'AWS.ELB.HTTPCode_Backend_2XX',
-                'AWS.ELB.HTTPCode_Backend_3XX',
-                'AWS.ELB.HTTPCode_Backend_4XX',
+            'TOTAL_TARGETS': [
+                'AWS.ELB.RequestCount',
             ],
             'ERROR_TARGETS': [
                 'AWS.ELB.HTTPCode_Backend_5XX',
-                # TODO: where is our timeout in aws cloudwatch?
-                #'stats_counts.status.balanced-api.timeout',
+                'AWS.ELB.HTTPCode_ELB_5XX',
             ]
         },
     }

@@ -104,9 +104,8 @@ class Calculator(object):
         return count
 
     def _for_service(self, targets, minutes_ago):
-        ok_count = self._get_targets_sum('OK_TARGETS', targets, minutes_ago)
+        total_count = self._get_targets_sum('TOTAL_TARGETS', targets, minutes_ago)
         error_count = self._get_targets_sum('ERROR_TARGETS', targets, minutes_ago)
-        total_count = ok_count + error_count
 
         if total_count:
             percentage = (total_count - float(error_count)) / total_count
@@ -114,8 +113,8 @@ class Calculator(object):
             percentage = 1
 
         logger.info(
-            'OK=%s, ERROR=%s, PERCENTAGE=%s',
-            ok_count, error_count, percentage * 100,
+            'TOTAL=%s, ERROR=%s, PERCENTAGE=%s',
+            total_count, error_count, percentage * 100,
         )
 
         return percentage * 100
