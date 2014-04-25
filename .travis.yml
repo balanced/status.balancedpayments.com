@@ -12,7 +12,7 @@ before_script:
   #- "flake8 situation --ignore=E501,W291,W293"
   - "wget https://commondatastorage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.3.zip"
   - "unzip -q google_appengine_1.9.3.zip"
-  - 'echo "$HOME/google-cloud-sdk/platform/google_appengine" >> env/lib/python2.7/site-packages/gae.pth'
+  - 'echo "google_appengine" >> env/lib/python2.7/site-packages/gae.pth'
   - 'echo "import dev_appserver; dev_appserver.fix_sys_path()" >> env/lib/python2.7/site-packages/gae.pth'
 # command to run tests
 script: "env/bin/nosetests -sv"
