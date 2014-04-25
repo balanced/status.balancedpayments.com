@@ -6,9 +6,10 @@ sys.path.insert(0, os.path.abspath('./situation'))
 sys.path.insert(0, os.path.abspath('./'))
 
 from situation import main, subscription, models
-from google.appengine.api import mail
 from google.appengine.ext import testbed
 import webapp2
+import mock
+
 
 class TestSubscription(unittest.TestCase):
 
@@ -108,7 +109,6 @@ class TestSubscription(unittest.TestCase):
 
         self._assert_expectations(tests)
 
-
     def test_subscribe_email(self):
         request = webapp2.Request.blank(path='/subscriptions/email', POST={
             'email': 'foo@bar.com',
@@ -119,7 +119,8 @@ class TestSubscription(unittest.TestCase):
         self.assertEqual(response.status_int, 200, 'Failed to get back a 200 status code from POST /subscriptions/email')
         self.assertEqual(response.body, '{"services": ["API", "DASH", "JS"], "subscribed": "email"}')
 
-    def test_subscribe_sms(self):
+    @mock.patch('situation.sms.SMS.send')
+    def test_subscribe_sms(self, send_method):
         # +15005550000 is a special testing Twilio number that passes their checks
         request = webapp2.Request.blank(path='/subscriptions/sms', POST={
             'phone': '+15005550000',
@@ -129,3 +130,8 @@ class TestSubscription(unittest.TestCase):
         response = request.get_response(main.app)
         self.assertEqual(response.status_int, 200, 'Failed to get back a 200 status code from POST /subscriptions/sms')
         self.assertEqual(response.body, '{"services": ["API", "DASH", "JS"], "subscribed": "sms"}')
+        send_method.assert_called_once_with(
+            '+15005550000',
+            'Successfully subscribed to Balanced API,DASH,JS incidents. Reply '
+            'with STOP to unsubscribe.'
+        )
