@@ -62,8 +62,7 @@ EMAIL = {
 
 LIBRATO_UPTIME = {
     'root_uri': 'https://metrics-api.librato.com/v1/metrics/',
-    'username': 'vendors@balancedpayments.com',
-    'password': '14d624cde57cfba7cfa76baf0284d94c33de7f289db5ee4172f20c117234afff',
+    'username': 'FIXME',
     'password': 'FIXME',
     'services': {
         'API': {
