@@ -36,8 +36,7 @@ class Calculator(object):
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
         passman.add_password(None, uri, self.username, self.password)
         authhandler = urllib2.HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(authhandler)
-        urllib2.install_opener(opener)
+        self.opener = urllib2.build_opener(authhandler)
 
     def _construct_url(
         self,
@@ -97,7 +96,7 @@ class Calculator(object):
                     resolution=resolution,
                 )
                 logger.debug('Fetching %s', url)
-                response = encoding.json.loads(urllib2.urlopen(url).read())
+                response = encoding.json.loads(self.opener.open(url).read())
                 count += self._calculate_data(response['measurements'])
                 if response.get('query', {}).get('next_time'):
                     start_time = response['query']['next_time']

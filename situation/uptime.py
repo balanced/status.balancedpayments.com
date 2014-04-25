@@ -31,8 +31,7 @@ class Calculator(object):
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
         passman.add_password(None, uri, self.username, self.password)
         authhandler = urllib2.HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(authhandler)
-        urllib2.install_opener(opener)
+        self.opener = urllib2.build_opener(authhandler)
 
     def _construct_uri(self, targets, minutes_ago=5):
         return '&'.join([
@@ -61,8 +60,8 @@ class Calculator(object):
         ok_uri = self._construct_uri(targets['OK_TARGETS'], minutes_ago)
         error_uri = self._construct_uri(targets['ERROR_TARGETS'], minutes_ago)
 
-        ok_stats = encoding.json.loads(urllib2.urlopen(ok_uri).read())
-        error_stats = encoding.json.loads(urllib2.urlopen(error_uri).read())
+        ok_stats = encoding.json.loads(self.opener.open(ok_uri).read())
+        error_stats = encoding.json.loads(self.opener.open(error_uri).read())
 
         error_counts = self._calculate_data(error_stats)
         ok_counts = self._calculate_data(ok_stats)
