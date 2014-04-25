@@ -1,0 +1,13 @@
+language: python
+python:
+  - "2.7"
+# command to install dependencies
+install: 
+  - "pip install flake8 --use-mirrors"
+  - "pip install -r requirements.txt --use-mirrors"
+  - "pip install -r test-requirements.txt --use-mirrors"
+  - "python setup.py develop"
+before_script: 
+  - "flake8 situation --ignore=E501,W291,W293"
+# command to run tests
+script: "nosetests -sv"
