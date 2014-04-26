@@ -38,7 +38,8 @@ import models
 import mailer
 import sms
 import subscription
-import librato_uptime
+from uptime import graphite
+from uptime import librato
 
 
 LOGGER = logging.getLogger(__name__)
@@ -47,6 +48,7 @@ LOGGER = logging.getLogger(__name__)
 def cache(method, seconds=60 * 60 * 24):
     """ A basic caching wrapper that will generate a key based off of the URL
     of the request """
+    #@functools.wraps
     def wrapped(handler, *a, **kw):
         key = (handler.request.path.replace('/', '') +
                handler.request.query_string)
@@ -210,8 +212,8 @@ class UptimeHandler(TwitterBaseController):
     def __init__(self, request, response):
         super(UptimeHandler, self).__init__(request, response)
         self.uptime_managers = [
-            uptime.Calculator(**settings.UPTIME),
-            librato_uptime.Calculator(**settings.LIBRATO_UPTIME)
+            graphite.Calculator(**settings.UPTIME),
+            librato.Calculator(**settings.LIBRATO_UPTIME)
         ]
 
     def get(self, *a, **kw):
