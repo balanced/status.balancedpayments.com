@@ -3,17 +3,10 @@ import logging
 import urllib2
 import json
 
+from . import determine_status
+
 
 LOGGER = logging.getLogger(__name__)
-
-
-def calculate_uptime(uptime):
-    # also exists in status.js
-    if uptime >= 99:
-        return 'UP'
-    if uptime >= 90:
-        return 'ISSUE'
-    return 'DOWN'
 
 
 class Calculator(object):
@@ -82,5 +75,5 @@ class Calculator(object):
 
             yield service, {
                 'uptime': thirty_day_percentage,
-                'status': calculate_uptime(five_min_percentage)
+                'status': determine_status(five_min_percentage)
             }

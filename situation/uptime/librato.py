@@ -5,20 +5,9 @@ import urllib2
 import time
 import json
 
+from . import determine_status
 
 logger = logging.getLogger(__name__)
-
-
-def determine_status(uptime):
-    """Determine status of service by given uptime and return
-
-    """
-    # also exists in status.js
-    if uptime >= 99:
-        return 'UP'
-    if uptime >= 90:
-        return 'ISSUE'
-    return 'DOWN'
 
 
 class Calculator(object):
