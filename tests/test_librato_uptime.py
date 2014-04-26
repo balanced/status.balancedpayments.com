@@ -43,7 +43,7 @@ class TestLibratoUptime(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def test_refresh(self):
+    def test_service_uptime(self):
         index = [0]
         resps = [
             # TOTAL A
