@@ -6,7 +6,7 @@ import json
 sys.path.insert(0, os.path.abspath('./situation'))
 sys.path.insert(0, os.path.abspath('./'))
 
-from situation.librato_uptime import Calculator
+from situation.uptime.librato import Calculator
 from google.appengine.ext import testbed
 import mock
 
