@@ -17,7 +17,6 @@
 import base64
 from collections import defaultdict
 from datetime import datetime, timedelta
-import functools
 import logging
 import os
 import time
@@ -33,7 +32,6 @@ import encoding
 import json
 import settings
 import tweeter
-import uptime
 import models
 import mailer
 import sms
