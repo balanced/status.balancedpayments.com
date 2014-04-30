@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.abspath('./'))
 from situation import settings, tweeter
 from situation.tweepy import TweepError
 from google.appengine.ext import testbed
+from . import skip_auth
 
 
 class TestTwitter(unittest.TestCase):
@@ -26,7 +27,7 @@ class TestTwitter(unittest.TestCase):
         self.testbed.deactivate()
 
     # Assert that fetching timeline tweets from twitter does not throw an exception
-    @unittest.skip("Skipped for now (needs authentication)")
+    @skip_auth()
     def test_get_tweets(self):
         t = tweeter.TwitterStatusProcessor(**settings.TWITTER['AUTH'])
 

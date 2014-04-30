@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.abspath('./'))
 from situation import sms
 from twilio.rest import TwilioException
 from google.appengine.ext import testbed
+from . import skip_auth
 
 
 class TestSMS(unittest.TestCase):
@@ -27,7 +28,7 @@ class TestSMS(unittest.TestCase):
 
     # Assert that trying to send a SMS over 160 characters gets truncated
     # before attempting to send with Twilio
-    @unittest.skip("Skipped for now (needs authentication)")
+    @skip_auth()
     def test_sms_max_length(self):
         response = None
         try:

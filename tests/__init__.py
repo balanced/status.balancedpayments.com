@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import logging
+import functools
 import optparse
 import sys
 # Install the Python unittest2 package before you run this script.
@@ -11,6 +11,13 @@ Run unit tests for App Engine apps.
 
 SDK_PATH    Path to the SDK installation
 TEST_PATH   Path to package containing test modules"""
+
+#: whether to skip tests which require authentication
+SKIP_AUTH_TESTS = int(os.environ.get('SKIP_AUTH_TESTS', True))
+
+skip_auth = functools.partial(
+    unittest.skipIf, SKIP_AUTH_TESTS, 'Skipped test which needs authentication'
+)
 
 
 def main(sdk_path, test_path):
