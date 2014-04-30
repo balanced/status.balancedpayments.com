@@ -1,20 +1,12 @@
 from __future__ import unicode_literals
 import logging
 import urllib2
+import json
 
-import encoding
+from . import determine_status
 
 
 LOGGER = logging.getLogger(__name__)
-
-
-def calculate_uptime(uptime):
-    # also exists in status.js
-    if uptime >= 99:
-        return 'UP'
-    if uptime >= 90:
-        return 'ISSUE'
-    return 'DOWN'
 
 
 class Calculator(object):
@@ -31,8 +23,7 @@ class Calculator(object):
         passman = urllib2.HTTPPasswordMgrWithDefaultRealm()
         passman.add_password(None, uri, self.username, self.password)
         authhandler = urllib2.HTTPBasicAuthHandler(passman)
-        opener = urllib2.build_opener(authhandler)
-        urllib2.install_opener(opener)
+        self.opener = urllib2.build_opener(authhandler)
 
     def _construct_uri(self, targets, minutes_ago=5):
         return '&'.join([
@@ -61,8 +52,8 @@ class Calculator(object):
         ok_uri = self._construct_uri(targets['OK_TARGETS'], minutes_ago)
         error_uri = self._construct_uri(targets['ERROR_TARGETS'], minutes_ago)
 
-        ok_stats = encoding.json.loads(urllib2.urlopen(ok_uri).read())
-        error_stats = encoding.json.loads(urllib2.urlopen(error_uri).read())
+        ok_stats = json.loads(self.opener.open(ok_uri).read())
+        error_stats = json.loads(self.opener.open(error_uri).read())
 
         error_counts = self._calculate_data(error_stats)
         ok_counts = self._calculate_data(ok_stats)
@@ -84,5 +75,5 @@ class Calculator(object):
 
             yield service, {
                 'uptime': thirty_day_percentage,
-                'status': calculate_uptime(five_min_percentage)
+                'status': determine_status(five_min_percentage)
             }

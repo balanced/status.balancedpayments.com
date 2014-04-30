@@ -60,6 +60,24 @@ EMAIL = {
     'sender': 'Balanced Status <noreply@balancedpayments.com>'
 }
 
+LIBRATO_UPTIME = {
+    'root_uri': 'https://metrics-api.librato.com/v1/metrics/',
+    'username': 'FIXME',
+    'password': 'FIXME',
+    'services': {
+        'API': {
+            'SOURCE': '*bapi-live*',
+            'TOTAL_TARGETS': [
+                'AWS.ELB.RequestCount',
+            ],
+            'ERROR_TARGETS': [
+                'AWS.ELB.HTTPCode_Backend_5XX',
+                'AWS.ELB.HTTPCode_ELB_5XX',
+            ]
+        },
+    }
+}
+
 # TWILIO API credentials
 TWILIO = {
     'account_sid': 'XXXX',

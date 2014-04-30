@@ -17,7 +17,6 @@
 import base64
 from collections import defaultdict
 from datetime import datetime, timedelta
-import functools
 import logging
 import os
 import time
@@ -33,11 +32,13 @@ import encoding
 import json
 import settings
 import tweeter
-import uptime
 import models
 import mailer
 import sms
 import subscription
+from uptime import graphite
+from uptime import librato
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -45,6 +46,7 @@ LOGGER = logging.getLogger(__name__)
 def cache(method, seconds=60 * 60 * 24):
     """ A basic caching wrapper that will generate a key based off of the URL
     of the request """
+    #@functools.wraps
     def wrapped(handler, *a, **kw):
         key = (handler.request.path.replace('/', '') +
                handler.request.query_string)
@@ -207,7 +209,10 @@ class UptimeHandler(TwitterBaseController):
 
     def __init__(self, request, response):
         super(UptimeHandler, self).__init__(request, response)
-        self.uptime_manager = uptime.Calculator(**settings.UPTIME)
+        self.uptime_managers = [
+            graphite.Calculator(**settings.UPTIME),
+            librato.Calculator(**settings.LIBRATO_UPTIME)
+        ]
 
     def get(self, *a, **kw):
         self.response.headers['Content-Type'] = 'application/json'
@@ -215,10 +220,11 @@ class UptimeHandler(TwitterBaseController):
 
     @cache
     def _get(self):
+        uptimes = []
+        for manager in self.uptime_managers:
+            uptimes.extend(manager.refresh())
         raw = {
-            'uptime': dict([(k, v)
-                            for k, v in
-                            self.uptime_manager.refresh()])
+            'uptime': dict(uptimes)
         }
 
         for service in tweeter.SERVICES:
